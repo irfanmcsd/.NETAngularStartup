@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "Inicio"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Actualiza a Pro y desbloquea todo el potencial del software.",
+     "_RESTRICTED": "Esta aplicación es solo para fines de demostración. El bot y otras funcionalidades no funcionarán."
+  },
+  "_UPGRADE": "Actualizar",
+  "_DOWNLOAD_NOW": "Descargar ahora",
+  "_COPYRIGHT": "Derechos de autor",
+  "_RESERVED": "Todos los derechos reservados",
+  "_SELECT_LANGUAGE": "Seleccionar idioma",
+  "_SERVER_IS_OFFLINE": "Servidor fuera de línea",
+  "_SERVER_OFFLINE_MESSAGE": "La llamada API no responde; es posible que el servidor esté fuera de línea.",
+  "_UNKNOWN_ERROR": "Error desconocido",
+  "_BAD_REQUEST": "Solicitud incorrecta",
+  "_RESPONSE_FAILED": "Error en la respuesta",
+  "_RESPONSE_FAILED_MESSAGE": "Ocurrió un error al procesar su solicitud.",
+  "_ERROR_OCCURED": "Error ocurrido",
+  "_ERROR_OCCURED_MESSAGE": "Se produjo un error al procesar su solicitud."
+}

@@ -1,4 +1,4 @@
-namespace MagicTradeBot.Models
+namespace NETAngularApp.Models
 {
     public class ErrorViewModel
     {

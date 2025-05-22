@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using reCAPTCHA.AspNetCore;
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     public class docController : Controller
     {

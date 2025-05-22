@@ -5,14 +5,14 @@ using DevCodeArchitect.DBContext;
 using DevCodeArchitect.Identity;
 using DevCodeArchitect.Services;
 using DevCodeArchitect.Utilities;
-using MagicTradeBot.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NETAngularApp.Models;
 using System.Diagnostics;
 using System.Globalization;
 
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     public class HomeController : Controller
     {

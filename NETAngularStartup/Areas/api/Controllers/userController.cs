@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 
-namespace MagicTradeBot.Areas.api.Controllers
+namespace NETAngularApp.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for user management operations including CRUD, authentication, and user actions

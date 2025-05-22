@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 
-namespace MagicTradeBot.Areas.api.Controllers
+namespace NETAngularApp.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for managing error log operations including viewing, clearing, and bulk actions.

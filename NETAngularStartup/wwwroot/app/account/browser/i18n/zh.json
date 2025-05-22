@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "首页"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "升级到Pro版，解锁软件的全部功能。",
+     "_RESTRICTED": "此应用仅用于演示用途。机器人及其他功能将无法使用。"
+  },
+  "_UPGRADE": "升级",
+  "_DOWNLOAD_NOW": "立即下载",
+  "_COPYRIGHT": "版权",
+  "_RESERVED": "保留所有权利",
+  "_SELECT_LANGUAGE": "选择语言",
+  "_SERVER_IS_OFFLINE": "服务器离线",
+  "_SERVER_OFFLINE_MESSAGE": "API调用无响应，服务器可能已离线。",
+  "_UNKNOWN_ERROR": "未知错误",
+  "_BAD_REQUEST": "错误请求",
+  "_RESPONSE_FAILED": "响应失败",
+  "_RESPONSE_FAILED_MESSAGE": "处理您的请求时发生错误。",
+  "_ERROR_OCCURED": "发生错误",
+  "_ERROR_OCCURED_MESSAGE": "处理您的请求时发生错误。"
+}

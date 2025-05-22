@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     /// <summary>
     /// Controller for handling account-related operations

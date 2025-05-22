@@ -37,7 +37,46 @@
                 </div>
             </div>
         </div>
+        <!-- Copyright & Legal -->
+        <div class="copyright">
+            <div class="row">
+                <div class="col-md-12 col-lg-5">
+                    <div class="copyright-text">
+                        <p>&copy; @DateTime.Now.Year @ApplicationSettings.Author. @GeneralResource["AllRightsReserved"].</p>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-7">
+                    <div class="d-flex flex-column flex-md-row justify-content-md-end align-items-center">
+                        <div class="copyright-link me-2">
+                            <a class="text-decoration-none text-white-50" href="/@ViewData["culture"]/privacy">@GeneralResource["PrivacyPolicy"]</a>
+                            &nbsp;|&nbsp;
+                            <a class="text-decoration-none text-white-50" href="/@ViewData["culture"]/terms">@GeneralResource["Terms"]</a>
+                           
+                        </div>
+                        <div class="language-selector me-md-3 mb-3 mb-md-0">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @GetLanguageName(ViewData["culture"]?.ToString() ?? "en")
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                                    <li><a class="dropdown-item" href="/en/@ViewData["page"]" hreflang="en" lang="en">English</a></li>
+                                    <li><a class="dropdown-item" href="/fr/@ViewData["page"]" hreflang="fr" lang="fr">Français</a></li>
+                                    <li><a class="dropdown-item" href="/de/@ViewData["page"]" hreflang="de" lang="de">Deutsch</a></li>
+                                    <li><a class="dropdown-item" href="/es/@ViewData["page"]" hreflang="es" lang="es">Español</a></li>
+                                    <li><a class="dropdown-item" href="/pt/@ViewData["page"]" hreflang="pt" lang="pt">Português</a></li>
+                                    <li><a class="dropdown-item" href="/ja/@ViewData["page"]" hreflang="ja" lang="ja">日本語</a></li>
+                                    <li><a class="dropdown-item" href="/zh/@ViewData["page"]" hreflang="zh" lang="zh">中文</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+  
 </footer>
 
 @functions {

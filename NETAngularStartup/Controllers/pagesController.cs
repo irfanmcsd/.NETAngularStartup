@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using MagicTradeBot.Controllers;
+using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
 using System.Security.Claims;
 
 
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     /// <summary>
     /// Controller for handling various pages including authentication, static content, and external login flows
@@ -32,6 +32,7 @@ namespace MagicTradeBot.Controllers
         private readonly EmailTemplateService _templateService;
 
         public PagesController(
+            IOptions<RecaptchaSettings> recaptchaSettings,
             IRecaptchaService recaptcha,
             SignInManager<ApplicationUser> signInManager,
             ApplicationDBContext context,

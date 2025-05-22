@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace MagicTradeBot.Areas.api.Controllers
+namespace NETAngularApp.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for managing tag operations including listing and bulk actions.

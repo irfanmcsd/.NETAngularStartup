@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MagicTradeBot.Areas.api.Controllers
+namespace NETAngularApp.Areas.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

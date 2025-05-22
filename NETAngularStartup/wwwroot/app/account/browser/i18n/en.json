@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "Home"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Upgrade to Pro and unlock the full power of the software.",
+     "_RESTRICTED": "This app is for demonstration purposes only. The bot and other functionalities will not operate."
+  },
+  "_UPGRADE": "Upgrade",
+  "_DOWNLOAD_NOW": "Download Now",
+  "_COPYRIGHT": "Copyright",
+  "_RESERVED": "All rights reserved",
+  "_SELECT_LANGUAGE": "Select Language",
+  "_SERVER_IS_OFFLINE": "Server is Offline",
+  "_SERVER_OFFLINE_MESSAGE": "The API call is not responding, may be server is offline",
+  "_UNKNOWN_ERROR": "Unknown Error",
+  "_BAD_REQUEST": "Bad Request",
+  "_RESPONSE_FAILED": "Response Failed",
+  "_RESPONSE_FAILED_MESSAGE": "Error occured while processing your request",
+  "_ERROR_OCCURED": "Error Occured",
+  "_ERROR_OCCURED_MESSAGE": "Error occured while processing your request"
+}

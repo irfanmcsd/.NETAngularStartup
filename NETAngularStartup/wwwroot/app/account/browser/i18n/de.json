@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "Startseite"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Upgrade auf Pro und schalte die volle Leistung der Software frei.",
+     "_RESTRICTED": "Diese App dient nur Demonstrationszwecken. Der Bot und andere Funktionen werden nicht funktionieren."
+  },
+  "_UPGRADE": "Upgrade",
+  "_DOWNLOAD_NOW": "Jetzt herunterladen",
+  "_COPYRIGHT": "Copyright",
+  "_RESERVED": "Alle Rechte vorbehalten",
+  "_SELECT_LANGUAGE": "Sprache auswählen",
+  "_SERVER_IS_OFFLINE": "Server ist offline",
+  "_SERVER_OFFLINE_MESSAGE": "Der API-Aufruf reagiert nicht, möglicherweise ist der Server offline.",
+  "_UNKNOWN_ERROR": "Unbekannter Fehler",
+  "_BAD_REQUEST": "Ungültige Anfrage",
+  "_RESPONSE_FAILED": "Antwort fehlgeschlagen",
+  "_RESPONSE_FAILED_MESSAGE": "Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten.",
+  "_ERROR_OCCURED": "Fehler aufgetreten",
+  "_ERROR_OCCURED_MESSAGE": "Bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten."
+}

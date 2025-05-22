@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MagicTradeBot.Areas.api.Controllers
+namespace NETAngularApp.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for managing blog operations including CRUD, listing, and bulk actions.

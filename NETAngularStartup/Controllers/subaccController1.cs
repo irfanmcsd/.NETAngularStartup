@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     [Authorize(Roles = "Admin,SuperAdmin")]
     public class subaccController1 : Controller

@@ -4,7 +4,7 @@ using DevCodeArchitect.SDK;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
-namespace MagicTradeBot.Controllers
+namespace NETAngularApp.Controllers
 {
     public class blogsController : Controller
     {

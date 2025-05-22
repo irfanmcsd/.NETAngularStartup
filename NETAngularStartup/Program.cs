@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using reCAPTCHA.AspNetCore;
 using System.Text;
 using System.Threading.RateLimiting;
 
@@ -148,6 +149,10 @@ void ValidateEssentialSecrets(Microsoft.Extensions.Configuration.IConfiguration 
     {
         throw new InvalidOperationException("RECAPTCHA_SITE_KEY configuration is invalid");
     }
+
+    // Register reCAPTCHA service
+    var recaptchaSettings = builder.Configuration.GetSection("RechapchaSettings");
+    builder.Services.AddRecaptcha(recaptchaSettings);
 }
 
 void RegisterConfigurationSections(WebApplicationBuilder builder)
