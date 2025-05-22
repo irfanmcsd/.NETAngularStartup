@@ -1,0 +1,47 @@
+.catmenu-container {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 500px;
+}
+
+.catmenu {
+    padding: 0px;
+}
+
+.catmenu ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.catmenu ul li a {
+    text-decoration: none;
+    margin: 3px 0px;
+    padding: 7px 5px;
+}
+
+.catmenu ul li > ul {
+    margin-left: 15px;
+}
+
+.catmenu ul li a:hover {
+     background-color: rgb(142, 175, 237);
+     color: #fff
+}
+
+.category-item {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
+.bxicon:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.selected {
+    background-color: rgb(142, 175, 237);
+    color: #fff
+}

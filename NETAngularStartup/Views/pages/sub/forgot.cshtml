@@ -1,0 +1,139 @@
+﻿@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@model DevCodeArchitect.Entity.ForgotPasswordViewModel
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
+
+<section class="home-banner home-banner-2 home-banner-3" aria-labelledby="forgot-password-heading">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+                <div class="secondary-color p-4 rounded shadow-sm">
+                    <h1 class="mb-1 text-center login-heading">Reset Your Password</h1>
+                    <p class="text-center text-muted mb-4">Enter your email to receive a password reset link</p>
+
+                    <form id="authForm" asp-controller="Pages" asp-action="ConfirmEmail"
+                          asp-route-culture="@ViewData["culture"]"
+                          asp-route-page="@ViewData["page"]"
+                          method="post"
+                          class="needs-validation" novalidate>
+
+                        <partial name="_FormValidationErrors" />
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
+                        <div class="row gy-4">
+                            <div class="col-12">
+                                <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" asp-for="Email" class="form-control"
+                                       placeholder="name@example.com"
+                                       required aria-required="true"
+                                       autocomplete="email">
+                                <span asp-validation-for="Email" class="invalid-feedback"></span>
+                            </div>
+
+                            <!-- New Password Field (for when resetting) -->
+                            @*<div class="col-12" id="new-password-field" style="display: none;">
+                                <label asp-for="NewPassword" class="form-label">New Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" asp-for="NewPassword" class="form-control"
+                                           id="password-field"
+                                           aria-required="true"
+                                           autocomplete="new-password">
+                                    <button class="btn btn-outline-secondary toggle-password" type="button"
+                                            aria-label="Show password"
+                                            data-target="password-field">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="NewPassword" class="invalid-feedback"></span>
+                            </div>*@
+
+                           
+                            <div class="col-12 d-flex justify-content-center my-3">
+                                @(Html.Recaptcha<reCAPTCHA.AspNetCore.Versions.RecaptchaV3HiddenInput>(RecaptchaSettings?.Value))
+                            </div>
+
+                            <div class="col-12">
+
+                                <div class="d-grid">
+                                    <button class="btn btn-lg btn-primary g-recaptcha"
+                                            data-sitekey="@RecaptchaSettings.Value.SiteKey"
+                                            data-callback="onSubmit">
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                        Send Reset Link
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-5">
+                        <hr class="mb-4 border-secondary-subtle">
+                        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                            <a asp-controller="Pages" asp-action="Index"
+                               asp-route-culture="@ViewData["culture"]"
+                               asp-route-page="signin"
+                               class="btn btn-outline-primary">
+                                Back to Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*
+@section Styles {
+    <style>
+        .password-strength-meter {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            document.querySelectorAll('.toggle-password').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordField = document.getElementById(targetId);
+                    const icon = this.querySelector('i');
+
+                    // Toggle the type attribute
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+
+                    // Toggle the eye icon
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+
+                    // Update the aria-label
+                    const newLabel = type === 'password' ? 'Show password' : 'Hide password';
+                    this.setAttribute('aria-label', newLabel);
+                });
+            });
+
+            // Form submission loading indicator
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const submitButton = document.getElementById('submit-button');
+                    const spinner = submitButton.querySelector('.spinner-border');
+                    submitButton.disabled = true;
+                    spinner.classList.remove('d-none');
+                });
+            }
+
+            // Show new password field if token exists in URL
+            if (window.location.search.includes('token')) {
+                document.getElementById('new-password-field').style.display = 'block';
+                document.getElementById('submit-button').textContent = 'Reset Password';
+            }
+        });
+    </script>
+}*@

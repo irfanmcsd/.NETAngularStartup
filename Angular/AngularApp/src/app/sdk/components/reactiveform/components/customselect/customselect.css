@@ -1,0 +1,51 @@
+
+.custom-select {
+    position: relative;
+    width: max-content;
+}
+
+.custom-select input {
+    font-size: 14px;
+    padding: 10px 16px;
+    padding-right: 32px;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.custom-select .custom-arrow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    height: 16px;
+    width: 16px;
+    height: 100%;
+    width: 24px;
+}
+
+.custom-select .custom-arrow .up_exp,
+.custom-select .custom-arrow .down_exp {
+    position: absolute;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+}
+
+.custom-select .custom-arrow .up_exp {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid black;
+    margin-top: 8px;
+}
+
+.custom-select .custom-arrow .down_exp {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid black;
+    margin-top: 30px;
+}

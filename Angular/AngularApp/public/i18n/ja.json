@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "ホーム"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Pro版にアップグレードして、ソフトウェアの全機能を解放します。",
+     "_RESTRICTED": "このアプリはデモンストレーション用です。ボットおよびその他の機能は利用できません。"
+  },
+  "_UPGRADE": "アップグレード",
+  "_DOWNLOAD_NOW": "今すぐダウンロード",
+  "_COPYRIGHT": "著作権",
+  "_RESERVED": "All rights reserved",
+  "_SELECT_LANGUAGE": "言語を選択",
+  "_SERVER_IS_OFFLINE": "サーバーはオフラインです",
+  "_SERVER_OFFLINE_MESSAGE": "APIの応答がありません。サーバーがオフラインの可能性があります。",
+  "_UNKNOWN_ERROR": "不明なエラー",
+  "_BAD_REQUEST": "不正なリクエスト",
+  "_RESPONSE_FAILED": "レスポンス失敗",
+  "_RESPONSE_FAILED_MESSAGE": "リクエストの処理中にエラーが発生しました。",
+  "_ERROR_OCCURED": "エラーが発生しました",
+  "_ERROR_OCCURED_MESSAGE": "リクエストの処理中にエラーが発生しました。"
+}

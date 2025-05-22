@@ -1,0 +1,21 @@
+
+<div class="label-bk" *ngIf="slug !== ''">
+     <div *ngIf="!editMode">
+        <span class="me-1">{{slug}}</span>  <a href="#" *ngIf="!isUpdate" (click)="changeSlug($event); false">change</a>
+     </div>
+     <div *ngIf="editMode">
+        <div class="mb-1">
+          <input
+            type="text"
+            placeholder="Enter slug"
+            class="form-control"
+            [(ngModel)]="slug"
+          />
+        </div>
+        <div class="mb-1">
+            <a href="#" (click)="update($event); false" class="btn btn-sm btn-success">Update</a>
+            <a href="#" (click)="cancel($event); false" class="btn btn-sm btn-default">Cancel</a>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,61 @@
+﻿@using DevCodeArchitect.Entity
+<!-- _CategoryNavItem.cshtml partial -->
+@model CategoryNavItemModel
+
+@{
+    var item = Model.Item;
+    var url = Model.Url;
+    var level = Model.Level;
+    var hasChildren = item != null && item.Children != null && item.Children.Count > 0;
+    var collapseId = $"submenu-{item.Term}-{level}";
+
+    // Determine if this item should be expanded
+    var isActive = Model.IsActive;
+    var isChildActive = item.Children?.Any(c => c.Term == Model.CurrentTerm) ?? false;
+    var shouldExpand = isActive || isChildActive || (Model.CurrentTerm == null && Model.IsFirstParent);
+}
+
+@if (item.CategoryData != null)
+{
+    <li class="nav-item">
+        @if (hasChildren)
+        {
+
+            <a class="nav-link @(shouldExpand ? "" : "collapsed") @(isActive ? "active" : "")"
+               data-bs-toggle="collapse"
+               href="#@collapseId"
+               aria-expanded="@shouldExpand"
+               aria-controls="@collapseId">
+                @item.CategoryData.Title
+            </a>
+
+            <div class="collapse @(shouldExpand ? "show" : "") children" id="@collapseId">
+                <ul class="navbar-nav flex-column w-100">
+                    @foreach (var child in item.Children)
+                    {
+                        @if (child.CategoryData != null)
+                        {
+                            var childUrl = Model.Path + "/" + child.Term;
+                            var model = new CategoryNavItemModel
+                            {
+                                Item = child,
+                                Url = childUrl,
+                                Level = level + 1,
+                                IsActive = Model.CurrentTerm == child.Term,
+                                CurrentTerm = Model.CurrentTerm
+                            };
+                            <partial name="_CategoryNavItem" model="model" />
+                            
+                        }
+                    }
+                </ul>
+            </div>
+
+
+        }
+        else
+        {
+            <a class="nav-link" href="@url">@item.CategoryData.Title</a>
+        }
+    </li>
+}

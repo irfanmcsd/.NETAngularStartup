@@ -1,0 +1,70 @@
+﻿@* @if (!string.IsNullOrEmpty(SiteConfiguration.Theme))
+{
+    <partial name="~/Views/themes/@SiteConfiguration.Theme/partials/_externalLogin.cshtml" />
+}*@
+
+@using System.Linq
+@using DevCodeArchitect.Identity
+@using MediaSoft.Models
+@using Microsoft.AspNetCore.Identity
+@model ExternalLoginProviderViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IStringLocalizer<GeneralResource> GeneralResource
+
+@{
+    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+    if (loginProviders.Count == 1) // first provider is internal identity
+    {
+
+    }
+    else
+    {       
+        <div class="text-center">
+            @if (Model.IsSignup)
+            {
+                <p class="mt-5 mb-4">Or sign up with</p>
+            }
+            else
+            {
+                <p class="mt-5 mb-4">Or sign in with</p>
+            }
+
+            @{
+                var CurrentCulture = ViewData["culture"];
+                var CurrentPage = ViewData["page"];
+            }
+
+            <form asp-controller="pages" asp-action="ExternalSignup" asp-route-returnurl="@Model.ReturnUrl" asp-route-culture="@CurrentCulture" asp-route-page="CurrentPage" method="post">
+
+                @foreach (var provider in loginProviders)
+                {
+                    switch (provider.Name)
+                    {
+                        case "Facebook":
+                            @*<div class="text-center">
+                            <button type="submit" class="btn btn-default pb-0" name="provider" value="@provider.Name"><img src="/images/facebook/ZW4QC.png" /></button>
+                        </div>*@
+                            break;
+                        case "Google":
+                           
+                                <button type="submit" class="btn btn-default" name="provider" value="@provider.Name">
+                                    <img src="/images/brands/googleicon.svg" alt="icon" />
+                                    Continue with Google
+                                </button>
+                           
+                           
+                            break;
+                        case "Twitter":
+                            @*<div class="text-center">
+                            <button type="submit" name="provider" value="@provider.Name" class="btn btn-default pb-0"><img src="/images/twitter/social_login_twitter.jpg" /></button>
+                        </div>*@
+                            break;
+                    }
+                }
+            </form>
+        </div>
+        
+       
+      
+    }
+}

@@ -1,0 +1,114 @@
+﻿@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@model DevCodeArchitect.Entity.LoginViewModel
+@using reCAPTCHA.AspNetCore
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
+@{
+    var externalLoginProviderViewModel = new MediaSoft.Models.ExternalLoginProviderViewModel()
+            {
+                IsSignup = false
+            };
+}
+
+<section class="home-banner home-banner-2 home-banner-3" aria-labelledby="login-heading">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+                <div class="secondary-color p-4 rounded shadow-sm">
+                    <h1 class="mb-4 text-center login-heading">Sign In to Your Account</h1>
+
+                    <form id="authForm" asp-controller="Pages" asp-action="Login"
+                          asp-route-culture="@ViewData["culture"]"
+                          asp-route-page="@ViewData["page"]"
+                          asp-route-returnurl="@ViewData["ReturnUrl"]"
+                          method="post"
+                          class="needs-validation" novalidate>
+
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
+                        <partial name="_FormValidationErrors" />
+
+                        <div class="row gy-4">
+                            <div class="col-12">
+                                <label asp-for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" asp-for="Email" class="form-control"
+                                       placeholder="name@example.com"
+                                       required aria-required="true"
+                                       autocomplete="username">
+                                <span asp-validation-for="Email" class="invalid-feedback"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" asp-for="Password" class="form-control"
+                                           id="password-field"
+                                           required aria-required="true"
+                                           autocomplete="current-password">
+                                    <button class="btn btn-outline-secondary toggle-password" type="button"
+                                            aria-label="Show password"
+                                            data-target="password-field">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Password" class="invalid-feedback"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="RememberMe" type="checkbox" id="remember_me">
+                                    <label class="form-check-label text-secondary" for="remember_me">
+                                        Keep me logged in
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-center my-3">
+                                @(Html.Recaptcha<reCAPTCHA.AspNetCore.Versions.RecaptchaV3HiddenInput>(RecaptchaSettings?.Value))
+                            </div>
+
+                            <div class="col-12">
+                                <div class="d-grid">
+                                        <button class="btn btn-lg btn-primary g-recaptcha"
+                                                data-sitekey="@RecaptchaSettings.Value.SiteKey"
+                                                data-callback="onSubmit"
+                                                >
+                                            Log in now
+                                        </button>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-5">
+                        <hr class="mb-4 border-secondary-subtle">
+
+                        <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-center gap-3">
+                            <div class="text-center text-md-start">
+                                <a asp-controller="Pages" asp-action="Index"
+                                   asp-route-culture="@ViewData["culture"]"
+                                   asp-route-page="signup"
+                                   class="link-secondary text-decoration-none">
+                                    Create new account
+                                </a>
+                            </div>
+                            <div class="text-center text-md-end">
+                                <a asp-controller="Pages" asp-action="Index"
+                                   asp-route-culture="@ViewData["culture"]"
+                                   asp-route-page="forgot"
+                                   class="link-secondary text-decoration-none">
+                                    Forgot password
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <partial name="_externalLoginProvider" model="externalLoginProviderViewModel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

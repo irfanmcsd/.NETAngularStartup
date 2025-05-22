@@ -1,0 +1,36 @@
+﻿@{
+    var query = from state in ViewData.ModelState.Values
+                from error in state.Errors
+                select error.ErrorMessage;
+
+    var messages = query.ToList();
+    if (messages.Count > 0)
+    {
+        if (messages.Count == 1)
+        {
+            @* Bootstrap 5 *@
+            <div class="alert alert-danger alert-icon alert-dismissible fade show" role="alert">
+                <i class="uil uil-times-circle"></i> @messages[0]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        else
+        {
+            @* Bootstrap 5 *@
+            <div class="alert alert-danger alert-icon alert-dismissible fade show" role="alert">
+
+                <strong>Errors!</strong>
+                <ul>
+                    @foreach (var item in messages)
+                    {
+                        <li>@item</li>
+                    }
+                </ul>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+        }
+    }
+
+}

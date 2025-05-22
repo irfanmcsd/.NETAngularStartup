@@ -1,0 +1,39 @@
+﻿@{
+    var Culture = "en";
+    var cultureObj = ViewData["culture"];
+    if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+    {
+        Culture = cultureStr;
+    }
+}
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+                    <h1 class="sub-banner-title">Email Verification Failed!</h1>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/@Culture/signup">Sign Up</a></li>
+                        <li>Account Activation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container text-center">
+        <p class="banner-text-sm1">
+            Thank you for verifying your email address. Your account is now active, and you can start using all the features of MagicTradeBot.
+        </p>
+
+        <a href="/@Culture/signin" class="btn">Log In to Your Account</a>
+
+        <p class="banner-text-sm1">
+            Didn’t activate your account? <a href="/@Culture/contact">Contact Support</a>
+        </p>
+
+    </div>
+</section>

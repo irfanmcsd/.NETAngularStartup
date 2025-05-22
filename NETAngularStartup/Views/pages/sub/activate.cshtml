@@ -1,0 +1,66 @@
+﻿@{
+    var Culture = "en";
+    var cultureObj = ViewData["culture"];
+    if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+    {
+        Culture = cultureStr;
+    }
+}
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+                    <h1 class="sub-banner-title">Activate Your Account</h1>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/@Culture/signup">Sign Up</a></li>
+                        <li>Account Activation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container">
+        <p class="banner-text-sm1">
+            Thank you for signing up! To complete your registration, please activate your account using the link sent to your email.
+        </p>
+
+        <div class="text-block">
+            <h3 class="mb-3">
+                What to Do Next:
+            </h3>
+
+            <div class="uvp-list uvp-list-sm">
+                <ul>
+                    <li><strong>Check Your Email</strong> – Look for an email from us (subject: "Activate Your Account").</li>
+                    <li><strong>Click the Activation Link</strong> – Open the email and click the verification button or link inside.</li>
+                    <li><strong>Get Started</strong> – Once activated, you can log in and access your account.</li>
+                   
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-block">
+            <h4 class="mb-3">
+                Didn’t Receive the Email?
+            </h4>
+
+            <div class="uvp-list uvp-list-sm">
+                <ul>
+                    <li>Check your <strong>spam</strong> or <strong>junk</strong> folder.</li>
+                    <li>Ensure you entered the correct email address.</li>
+                    <li>Still missing it? <a href="#">Resend Activation Email</a></li>
+                </ul>
+            </div>
+            
+        </div>
+
+        <p class="banner-text-sm1">
+            Need help? <a href="/@Culture/contact">Contact Support</a>
+        </p>
+    </div>
+</section>

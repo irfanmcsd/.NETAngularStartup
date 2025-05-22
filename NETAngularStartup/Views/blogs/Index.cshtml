@@ -1,0 +1,230 @@
+﻿@using DevCodeArchitect.DBContext
+@using DevCodeArchitect.Entity
+@using DevCodeArchitect.Utilities
+@model BlogListViewModel
+@inject ApplicationDBContext _context
+
+@{
+    var Culture = "en";
+    var cultureObj = ViewData["culture"];
+    if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+    {
+        Culture = cultureStr;
+    }
+    List<Categories>? categoryHierarchy = null;
+    List<Blogs>? Blogs = null;
+    // Check if we have a search term and try to find matching documentation
+    var hasTerm = !string.IsNullOrEmpty(ViewData["term"] as string);
+    var docFound = false;
+
+    if (hasTerm)
+    {
+        @*var Term = ViewData["term"] as string;
+        var Documents = await Blog.LoadItems(_context, new CategoryQueryEntity()
+                {
+                    Slug = Term,
+                    type = CategoryEnum.Types.Documentation,
+                    IsEnabled = Types.ActionTypes.Enabled,
+                    Culture = Culture
+                });
+
+        if (Documents != null)
+        {
+            Doc = Documents[0];
+        }*@
+
+    }
+
+}
+
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+                    <h1 class="sub-banner-title">Latest News & Blog</h1>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li>Blog</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container">
+        <div class="row">
+      
+            <div class="col-xl-8 col-lg-8 col-md-12 order_md-1">
+                <div class="blog-list-main">
+                    @{
+                        if (Model.TotalRecords == 0)
+                        {
+                            <div class="blog-not-found-container">
+                                <div class="not-found-header text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#6c757d" viewBox="0 0 16 16" class="mb-3">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                    </svg>
+                                    <h1 class="mb-3">No Blog Posts Found</h1>
+                                    <p class="lead text-muted">We couldn't find any blog posts matching your request.</p>
+                                </div>
+
+                                <div class="suggestions-box">
+                                    <h3 class="mb-4">What you can do:</h3>
+
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-number">1</div>
+                                        <div class="suggestion-content">
+                                            <h4>Browse our categories</h4>
+                                            <p>Explore posts by topic using our blog categories menu.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-number">2</div>
+                                        <div class="suggestion-content">
+                                            <h4>Try a different search</h4>
+                                            <p>Use different keywords in our search bar to find relevant content.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="suggestion-item">
+                                        <div class="suggestion-number">3</div>
+                                        <div class="suggestion-content">
+                                            <h4>Check our popular posts</h4>
+                                            <div class="popular-posts-links mt-2">
+                                                <a href="#" class="btn btn-outline-primary btn-sm me-2 mb-2">Getting Started Guide</a>
+                                                <a href="#" class="btn btn-outline-primary btn-sm me-2 mb-2">Latest Features</a>
+                                                <a href="#" class="btn btn-outline-primary btn-sm me-2 mb-2">Tutorials</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="cta-section text-center mt-5">
+                                    <p class="mb-3">Want us to cover a specific topic?</p>
+                                    <a href="/contact" class="btn btn-primary">Suggest a Blog Topic</a>
+                                </div>
+                            </div>
+                        }
+                        else if (Model.DataList != null)
+                        {
+                            foreach (var Item in Model.DataList)
+                            {
+                                if (Item.Author != null && Item.BlogData != null)
+                                {
+                                    var URL = "/post/" + Culture + "/" + Item.Term;
+                                    <div class="blog-list-box">
+                                        @if (!string.IsNullOrEmpty(Item.Cover))
+                                        {
+                                            <div class="blog-list-img">
+                                                <a href="@URL"><img src="/images/blog-list-1.jpg" alt="@Item.BlogData.Title"></a>
+                                            </div>
+                                        }
+                                       
+                                        <div class="blog-list-content">
+                                            <a href="@URL" class="blog-list-title">@Item.BlogData.Title</a>
+                                            <ul>
+                                                <li>@Item.CreatedAt.ToString("dd MMMM, yyyy")</li>
+                                                @*<li>by John Doe</li>*@
+                                            </ul>
+                                            <p class="blog-list-des">@Item.BlogData.ShortDescription</p>
+                                            <a href="@URL" class="read-more">Read More</a>
+                                        </div>
+                                    </div>
+
+
+                                }
+                            }
+
+                            @if (Model.QueryOptions != null && Model.TotalRecords > Model.QueryOptions.PageSize)
+                            {
+                                var _paginationEntity = new PaginationViewModel()
+                                {
+                                    pagenumber = Model.QueryOptions.PageNumber,
+                                    TotalRecords = Model.TotalRecords ?? 0,
+                                    PageSize = Model.QueryOptions.PageSize,
+                                    Default_Url = Model.DefaultUrl ?? string.Empty,
+                                    Pagination_Url = Model.PaginationUrl ?? string.Empty
+                                };
+                                @await Html.PartialAsync("~/Views/Shared/_Pagination.cshtml", _paginationEntity)
+                            }
+                        }
+                    }
+                   
+
+                 
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-4 col-md-12 order_md-2">
+                <div class="blog-sidebar">
+
+                    @{
+
+                        var Docs = await CategoriesBLL.LoadItems(_context, new CategoryQueryEntity()
+            {
+                type = CategoryEnum.Types.Blogs,
+                LoadAll = true,
+                IsEnabled = Types.ActionTypes.Enabled,
+                Culture = Culture,
+                IsCache = true
+            });
+
+                        if (Docs != null && Docs.Count > 0)
+                        {
+                            var hierarchyService = new CategoryHierarchyService();
+                            categoryHierarchy = hierarchyService.BuildHierarchy(Docs, 0);
+
+                            @if (categoryHierarchy != null && categoryHierarchy.Count > 0)
+                            {
+                                <div class="category-nav-container">
+                                    <nav class="navbar navbar-expand-md category-bg flex-column align-items-start">
+                                        <div class="offcanvas-body p-0 w-100">
+                                            <ul class="navbar-nav flex-column w-100 mb-4" id="categoryNav">
+                                                @{
+                                                    var firstParent = categoryHierarchy.FirstOrDefault();
+                                                    var currentTerm = ViewData["term"]
+                                                    ?? ViewData["term"] as string
+                                                    ?? firstParent?.Term;
+                                                }
+                                                @foreach (var item in categoryHierarchy)
+                                                {
+                                                    @if (item.CategoryData != null)
+                                                    {
+                                                        var url = "/" + Culture + "/blog/" + item.Term;
+                                                        var isFirstParent = item == firstParent;
+                                                        var isActive = string.Equals(currentTerm as string, item.Term, StringComparison.Ordinal) || (currentTerm == null && isFirstParent);
+                                                        var model = new CategoryNavItemModel
+                                                        {
+                                                            Item = item,
+                                                            Url = url,
+                                                            Level = 0,
+                                                            IsFirstParent = isFirstParent,
+                                                            Path = "/" + Culture +"/blog"
+                                                        };
+                                                        <partial name="_CategoryNavItem" model="model" />
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            }
+
+                        }
+
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+

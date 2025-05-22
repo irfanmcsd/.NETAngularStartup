@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "Accueil"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Passez à Pro et débloquez toute la puissance du logiciel.",
+     "_RESTRICTED": "Cette application est réservée à des fins de démonstration. Le bot et d'autres fonctionnalités ne fonctionneront pas."
+  },
+  "_UPGRADE": "Passer à Pro",
+  "_DOWNLOAD_NOW": "Télécharger maintenant",
+  "_COPYRIGHT": "Copyright",
+  "_RESERVED": "Tous droits réservés",
+  "_SELECT_LANGUAGE": "Sélectionner la langue",
+  "_SERVER_IS_OFFLINE": "Serveur hors ligne",
+  "_SERVER_OFFLINE_MESSAGE": "La requête API ne répond pas. Le serveur est peut-être hors ligne.",
+  "_UNKNOWN_ERROR": "Erreur inconnue",
+  "_BAD_REQUEST": "Requête incorrecte",
+  "_RESPONSE_FAILED": "Échec de la réponse",
+  "_RESPONSE_FAILED_MESSAGE": "Une erreur s'est produite lors du traitement de votre demande.",
+  "_ERROR_OCCURED": "Erreur survenue",
+  "_ERROR_OCCURED_MESSAGE": "Une erreur s'est produite lors du traitement de votre demande."
+}

@@ -1,0 +1,38 @@
+<app-loader *ngIf="showLoader"></app-loader>
+<div *ngIf="!showLoader">
+    <div *ngIf="categoryOptions.dropdown_type === 0">
+        <ng-select [(ngModel)]="control.value">
+            <ng-option *ngFor="let item of control.options" [value]="item.key">{{item.value}}</ng-option>
+        </ng-select>
+        <!--
+        <select
+            class="form-select"
+            [attr.disabled]="control.disabled ? '' : null"
+            [ngClass]="{ 'is-invalid': hasErrors }"
+            [id]="control.key"
+            [(ngModel)]="control.value"
+            (ngModelChange)="onItemSelect($event)"
+            >
+            <option
+                *ngFor="let opt of control.options; trackBy: getKey"
+                [value]="opt.key"
+            >
+                {{ opt.value }}
+            </option>
+       </select>-->
+    </div>
+    <div *ngIf="categoryOptions.dropdown_type === 1">
+        <ng-select 
+            [multiple]="true"
+            [closeOnSelect]="false"
+            [searchable]="categoryOptions.dropdownSettings.allowSearchFilter"
+            [maxSelectedItems]="categoryOptions.dropdownSettings.itemsShowLimit"
+            [disabled]="categoryOptions.dropdownSettings.disabled"
+            (change)="onItemSelect($event)"
+            [(ngModel)]="control.categoryOptions">
+           
+            <ng-option *ngFor="let item of categoryOptions.dropdownList" [value]="item.key">{{item.value}}</ng-option>
+        </ng-select>
+       
+    </div>
+</div>

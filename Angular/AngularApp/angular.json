@@ -1,0 +1,131 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "MagicBotApp": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "../../MagicTradeBot/wwwroot/app/account",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "public/assets/admin/plugins/simplebar/css/simplebar.css",
+              "public/assets/admin/plugins/perfect-scrollbar/css/perfect-scrollbar.css",
+              "public/assets/admin/plugins/metismenu/css/metisMenu.min.css",
+              "public/assets/admin/css/bootstrap.min.css",
+              "public/assets/admin/css/bootstrap-extended.css",
+              "public/assets/admin/css/app.css",
+              "public/assets/admin/css/icons.css",
+              "public/assets/admin/css/dark-theme.css",
+	            "public/assets/admin/css/semi-dark.css",
+	            "public/assets/admin/css/header-colors.css",
+              "public/assets/plugins/croppie/croppie.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "public/app.css"
+            ],
+            "scripts": [
+              "public/assets/admin/js/bootstrap.bundle.min.js",
+              "public/assets/admin/js/jquery.min.js",
+              "public/assets/admin/plugins/simplebar/js/simplebar.min.js",
+              "public/assets/admin/plugins/metismenu/js/metisMenu.min.js",
+              "public/assets/admin/plugins/perfect-scrollbar/js/perfect-scrollbar.js",
+              "public/assets/admin/js/app.js",
+              "public/assets/plugins/croppie/croppie.js",
+              "node_modules/exif-js/exif.js",
+              "node_modules/apexcharts/dist/apexcharts.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.prod.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "4MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "MagicBotApp:build:production"
+            },
+            "development": {
+              "buildTarget": "MagicBotApp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

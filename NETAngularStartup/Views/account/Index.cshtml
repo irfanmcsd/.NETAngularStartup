@@ -1,0 +1,70 @@
+﻿@using DevCodeArchitect.Utilities
+@using System.Web
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@{
+    // Use app layout
+    Layout = "_AppLayout";
+
+    // Null-safe value extraction with fallbacks
+    var culture = ViewData[ViewDataKeys.Culture] as string ?? "en";
+    var userId = ViewData[ViewDataKeys.UserID] as string ?? string.Empty;
+    var isAuthenticated = ViewData[ViewDataKeys.IsAuthenticated] as bool? ?? false;
+
+    // XSS protection for dynamic values
+    var encodedUserId = HttpUtility.JavaScriptStringEncode(userId);
+    var encodedCulture = HttpUtility.JavaScriptStringEncode(culture);
+    var antiforgeryToken = Antiforgery.GetAndStoreTokens(Context).RequestToken;
+
+}
+
+@if (isAuthenticated)
+{
+    <!-- Angular Configuration -->
+    <script type="application/javascript">
+        // Protected configuration object
+        window._angConfig = Object.freeze({
+            a_access: @Json.Serialize(User.IsInRole("Admin") || User.IsInRole("SuperAdmin")),
+            id: '@Html.Raw(encodedUserId)',
+            u: "@Html.Raw(HttpUtility.JavaScriptStringEncode(ApplicationSettings.Domain.Backend))",
+            cul: '@Html.Raw(encodedCulture)',
+            title: "@Html.Raw(HttpUtility.JavaScriptStringEncode(ApplicationSettings.Author))",
+            xsrfToken: "@antiforgeryToken"
+        });
+    </script>
+
+    <!-- Application Container -->
+    <app-root>
+        <div class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Loading application...</p>
+        </div>
+    </app-root>
+
+    <!-- Environment-specific scripts -->
+    <environment include="Development">
+        <script src="~/js/app.dev.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/app.prod.js" asp-append-version="true"></script>
+    </environment>
+}
+else
+{
+    <!-- Authorization Failed Section -->
+    <div class="authorization-error">
+        <div class="error-container">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Access Denied</h2>
+            <p>You don't have permission to view this page.</p>
+            <div class="action-buttons">
+                <a href="/@culture/signin" class="btn btn-primary">
+                    Return to Login
+                </a>
+                <a href="/@culture" class="btn btn-secondary">
+                    Go to Homepage
+                </a>
+            </div>
+        </div>
+    </div>
+}
+

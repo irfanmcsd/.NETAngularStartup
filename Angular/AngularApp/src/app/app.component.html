@@ -1,0 +1,21 @@
+<app-loader-v2 *ngIf="loading$ | async"></app-loader-v2>
+
+<div *ngIf="!(loading$ | async)">
+ 
+  <div class="wrapper" [hidden]="!isAuthorized">
+
+    <app-sidebar [pageRole]="pageRole"></app-sidebar>
+    
+    <app-header [isAuthenticated]="isAuthorized" [User]="User"></app-header>
+   
+    <div class="page-wrapper">
+        <div class="page-content">
+   
+            <router-outlet></router-outlet>
+
+        </div>
+    </div>
+   
+    <app-footer></app-footer>
+  </div>
+</div>

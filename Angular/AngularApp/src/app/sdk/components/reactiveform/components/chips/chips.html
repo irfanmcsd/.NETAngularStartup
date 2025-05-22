@@ -1,0 +1,11 @@
+<div class="d-flex flex-wrap mb-4 pb-4">
+   <label [ngClass]="{ 'selected': option.selected }" (click)="toggleSelection(option, $event); false" class="category-toggle bubble_select mx-2 my-2" *ngFor="let option of categoryOptions.options">
+    <span *ngIf="!option.selected" class="plus-sign me-1">+</span>
+    <span *ngIf="option.selected" class="tick-sign  me-1">✓</span>
+    {{option.title}}
+      
+   </label>
+   
+</div>
+
+

@@ -1,0 +1,514 @@
+<div *ngIf="isAuthenticated">
+  <div *ngIf="!pageRole.admin">
+    <app-norecord [message]="'Access Restricted'"></app-norecord>
+  </div>
+
+  <div *ngIf="pageRole.admin && pageInit">
+    <div *ngIf="errorMessage === ''">
+      <div *ngIf="pageIndex === '_INDEX_'">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search Users..."
+                  [(ngModel)]="navQuery.term"
+                  (keyup.enter)="searchRecords($event)"
+                />
+              </div>
+              <div class="d-flex">
+                <button
+                  class="btn btn-primary me-1"
+                  (click)="toolbarAction('add')"
+                >
+                  Create Account
+                </button>
+              </div>
+            </div>
+
+            <!-- LIST -->
+            <div class="mt-4 mb-4">
+              <!-- List Stats -->
+
+              <ng-container *ngIf="(data$ | async) as DataList">
+                <div *ngIf="DataList.length > 0">
+                  <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Date Registered</th>
+                          <th>Email Confirmed</th>
+                          <th>Status</th>
+                          <th class="text-nowrap">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr
+                          *ngFor="let item of DataList; trackBy: getKey; let i=index"
+                        >
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="recent-product-img">
+                                <a [routerLink]="['/users/profile/' + item.id]">
+                                  <img [src]="item.avatar" />
+                                </a>
+                              </div>
+                              <div class="ms-2">
+                                <a [routerLink]="['/users/profile/' + item.id]">
+                                  {{item.fullName}}
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td>{{ item.createdAt | date: "mediumDate" }}</td>
+
+                          <td>
+                            <span
+                              *ngIf="!item.emailConfirmed"
+                              class="badge rounded-pill bg-light-danger text-danger"
+                            >
+                              Not Confirmed
+                            </span>
+                            <span
+                              *ngIf="item.emailConfirmed"
+                              class="badge rounded-pill bg-light-success text-success"
+                            >
+                              Confirmed
+                            </span>
+                          </td>
+                          <td>
+                            <ng-container [ngSwitch]="item.isEnabled">
+                              <span
+                                *ngSwitchCase="0"
+                                class="badge rounded-pill bg-light-danger text-danger"
+                              >
+                                Inactive
+                              </span>
+                              <span
+                                *ngSwitchCase="1"
+                                class="badge rounded-pill bg-light-success text-success"
+                              >
+                                Active
+                              </span>
+                              <span
+                                *ngSwitchCase="4"
+                                class="badge rounded-pill bg-light-danger text-success"
+                              >
+                                Locked
+                              </span>
+                              <span
+                                *ngSwitchCase="3"
+                                class="badge rounded-pill bg-light-danger text-success"
+                              >
+                                Archive
+                              </span>
+                            </ng-container>
+                          </td>
+
+                          <td>
+                            <div class="dropdown options ms-auto">
+                              <div
+                                class="dropdown-toggle dropdown-toggle-nocaret"
+                                data-bs-toggle="dropdown"
+                              >
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                              </div>
+                              <ul class="dropdown-menu">
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="{{ appConfig.apiUrl }}/{{ appConfig.culture }}/sub_acc/{{ item.id }}"
+                                  >
+                                    <i class="bx bx-lock"></i> Access Account</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    [routerLink]="['/users/profile/' + item.id]"
+                                  >
+                                    <i class="bx bx-lock"></i> View Profile</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="javascript:;"
+                                    [routerLink]="['/users/change-password/' + item.id]"
+                                  >
+                                    <i class="bx bx-lock"></i> Change
+                                    Password</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="javascript:;"
+                                    [routerLink]="['/users/change-email/' + item.id]"
+                                  >
+                                    <i class="bx bx-lock"></i> Change Email</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="javascript:;"
+                                    [routerLink]="['/users/update-role/' + item.id]"
+                                  >
+                                    <i class="bx bx-lock"></i> Update Role</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    class="dropdown-item"
+                                    href="javascript:;"
+                                    (click)="deleteRecord(item, $event); false"
+                                  >
+                                    <i class="bx bx-trash"></i> Delete</a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Pagination -->
+                  <div class="d-flex justify-content-cent mt-3">
+                    <pagination
+                      [currentPage]="navQuery.pagenumber"
+                      [totalRecords]="(records$ | async) ?? 0"
+                      [pageSize]="navQuery.pagesize"
+                      (OnSelection)="paginationSelection($event)"
+                    >
+                    </pagination>
+                  </div>
+                </div>
+
+                <div *ngIf="DataList.length === 0">
+                  <app-norecord [message]="NoRecordText"></app-norecord>
+                </div>
+              </ng-container>
+            </div>
+
+            <!-- Close List -->
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="pageIndex === '_CREATE_' || pageIndex === '_UPDATE_' || pageIndex === '_CHANGE_AVATAR_' || pageIndex === '_CHANGE_USER_ROLE_' || pageIndex === '_CHANGE_EMAIL_' || pageIndex === '_CHANGE_PASS_'"
+      >
+        <div class="mb-3">
+          <button (click)="back($event);" class="btn btn-secondary me-1">
+            Back to Listing
+          </button>
+        </div>
+
+        <div class="row" *ngIf="pageIndex !== '_CREATE_'">
+          <div class="col-12 col-lg-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="mb-3">
+                  <img
+                    [src]="selectedDocument.avatar"
+                    alt="{{selectedDocument.firstName}}"
+                    class="img-fluid"
+                  />
+                </div>
+
+                <div class="fm-menu">
+                  <div class="list-group list-group-flush">
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update Profile</span></a
+                    >
+
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update-avatar/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update Avatar</span></a
+                    >
+                    <a
+                      [routerLink]="['/users/change-password/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Change Password</span></a
+                    >
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/change-email/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Change Email</span></a
+                    >
+
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update-role/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update User-Role</span></a
+                    >
+
+                    <a
+                      *ngIf="selectedDocument.isEnabled === 0"
+                      href="javascript:;"
+                      (click)="navAction('enable', 'Activate Account', 'Are you sure you want to activate user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Activate Account</span></a
+                    >
+
+                    <a
+                      *ngIf="selectedDocument.isEnabled === 1"
+                      href="javascript:;"
+                      (click)="navAction('disable', 'Deactivate Account', 'Are you sure you want to deactivate user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Block Account</span></a
+                    >
+
+                    <a
+                      href="javascript:;"
+                      (click)="navAction('delete', 'Delete User', 'Are you sure you want to delete user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Delete</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-9">
+            <div class="card-body p-4">
+              <h5 class="card-title">{{headingTitle}}</h5>
+              <hr />
+              <app-loader *ngIf="showLoader"></app-loader>
+              <div *ngIf="!showLoader">
+                <dynamic-modal-form
+                  [controls]="controls"
+                  [showLoader]="showLoader"
+                  [showCancel]="false"
+                  [showModal]="false"
+                  [submitText]="submitButtonText"
+                  (OnSubmit)="submitForm($event)"
+                >
+                </dynamic-modal-form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" *ngIf="pageIndex === '_CREATE_'">
+          <div class="card-body p-4">
+            <h5 class="card-title">{{headingTitle}}</h5>
+            <hr />
+            <app-loader *ngIf="showLoader"></app-loader>
+            <div *ngIf="!showLoader">
+              <dynamic-modal-form
+                [controls]="controls"
+                [showLoader]="showLoader"
+                [showCancel]="false"
+                [showModal]="false"
+                [submitText]="submitButtonText"
+                (OnSubmit)="submitForm($event)"
+              >
+              </dynamic-modal-form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="pageIndex === '_PROFILE_'">
+        <div class="mb-3">
+          <button (click)="back($event);" class="btn btn-secondary me-1">
+            Back to Listing
+          </button>
+          <!--<button (click)="edit($event);" class="btn btn-secondary me-1">
+            Edit Information
+          </button>-->
+        </div>
+        <div class="row">
+          <div class="col-12 col-lg-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="mb-3">
+                  <img
+                    [src]="selectedDocument.avatar"
+                    alt="{{selectedDocument.firstName}}"
+                    class="img-fluid"
+                  />
+                </div>
+
+                <div class="fm-menu">
+                  <div class="list-group list-group-flush">
+                     <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update Profile</span></a
+                    >
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update-avatar/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update Avatar</span></a
+                    >
+                    <a
+                      [routerLink]="['/users/change-password/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Change Password</span></a
+                    >
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/change-email/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Change Email</span></a
+                    >
+
+                    <a
+                      href="javascript:;"
+                      [routerLink]="['/users/update-role/' + selectedDocument.id]"
+                      class="list-group-item py-1"
+                      ><span>Update User-Role</span></a
+                    >
+
+                    <a
+                      *ngIf="selectedDocument.isEnabled === 0 || !selectedDocument.emailConfirmed"
+                      href="javascript:;"
+                      (click)="navAction('enable', 'Activate Account', 'Are you sure you want to activate user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Activate Account</span></a
+                    >
+
+                    <a
+                      *ngIf="selectedDocument.isEnabled === 1 && selectedDocument.emailConfirmed"
+                      href="javascript:;"
+                      (click)="navAction('disable', 'Deactivate Account', 'Are you sure you want to deactivate user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Block Account</span></a
+                    >
+
+                    <a
+                      href="javascript:;"
+                      (click)="navAction('delete', 'Delete User', 'Are you sure you want to delete user account?', $event); false"
+                      class="list-group-item py-1"
+                      ><span>Delete</span></a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-9">
+            <app-loader *ngIf="showLoader"></app-loader>
+
+            <div *ngIf="!showLoader">
+              <div class="row">
+                <div class="col-md-12">
+                  <div [ngSwitch]="ProfileView">
+                    <div *ngSwitchCase="0">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">
+                            {{selectedDocument.firstName}}
+                          </h4>
+                          <p class="mb-2">
+                            Registered: {{ selectedDocument.createdAt | date:
+                            "fullDate" }}
+                          </p>
+
+                          <div class="border border-3 p-4 rounded mb-3">
+                            <h2>Information</h2>
+                            <hr />
+
+                            <dl class="row">
+                              <dt class="col-sm-3 mb-2"><h6>ID:</h6></dt>
+                              <dd class="col-sm-9 mb-2">
+                                <h6>{{selectedDocument.id}}</h6>
+                              </dd>
+                              <dt class="col-sm-3 mb-2">
+                                <h6>Email:</h6>
+                              </dt>
+                              <dd class="col-sm-9 mb-2">
+                                <h6>{{selectedDocument.email}}</h6>
+                              </dd>
+
+                              <dt class="col-sm-3 mb-2">
+                                <h6>Phone No:</h6>
+                              </dt>
+                              <dd class="col-sm-9 mb-2">
+                                <h6>{{selectedDocument.phoneNumber}}</h6>
+                              </dd>
+
+                              <dt class="col-sm-3 mb-2">
+                                <h6>Email Confirmed:</h6>
+                              </dt>
+
+                              <dd class="col-sm-9 mb-2">
+                                <h6>
+                                  <a
+                                    class="me-1"
+                                    [routerLink]="['/users/emailConfirmed/' + selectedDocument.emailConfirmed]"
+                                  >
+                                    <span
+                                      class="text-success"
+                                      *ngIf="selectedDocument.emailConfirmed"
+                                      >Yes</span
+                                    >
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="!selectedDocument.emailConfirmed"
+                                      >No</span
+                                    >
+                                  </a>
+                                </h6>
+                              </dd>
+
+                              <dt class="col-sm-3 mb-2">
+                                <h6>Account status:</h6>
+                              </dt>
+                              <dd class="col-sm-9 mb-2">
+                                <h6>
+                                  <a
+                                    class="me-1"
+                                    [routerLink]="['/users/isenabled/' + selectedDocument.isEnabled]"
+                                  >
+                                    <span
+                                      class="text-success"
+                                      *ngIf="selectedDocument.isEnabled"
+                                      >Enabled</span
+                                    >
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="!selectedDocument.isEnabled"
+                                      >Inactive</span
+                                    >
+                                  </a>
+                                </h6>
+                              </dd>
+                            </dl>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="errorMessage !== ''">
+      <app-norecord [message]="errorMessage"></app-norecord>
+    </div>
+  </div>
+</div>

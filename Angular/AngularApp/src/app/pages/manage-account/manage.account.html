@@ -1,0 +1,29 @@
+<div *ngIf="isAuthenticated">
+  <div *ngIf="!pageRole.user">
+    <app-norecord [message]="'Access Restricted'"></app-norecord>
+  </div>
+
+  <div *ngIf="pageRole.user && pageInit">
+    <div *ngIf="errorMessage === ''">
+      <div class="card-body p-4">
+          <h5 class="card-title">{{headingTitle}}</h5>
+          <hr />
+          <app-loader *ngIf="showLoader"></app-loader>
+          <div *ngIf="!showLoader">
+            <dynamic-modal-form
+              [controls]="controls"
+              [showLoader]="showLoader"
+              [showCancel]="false"
+              [showModal]="false"
+              [submitText]="submitButtonText"
+              (OnSubmit)="submitForm($event)"
+            >
+            </dynamic-modal-form>
+          </div>
+        </div>
+    </div>
+    <div *ngIf="errorMessage !== ''">
+      <app-norecord [message]="errorMessage"></app-norecord>
+    </div>
+  </div>
+</div>

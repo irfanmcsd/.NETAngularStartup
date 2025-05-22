@@ -1,0 +1,200 @@
+﻿
+
+@using DevCodeArchitect.DBContext
+@using DevCodeArchitect.Entity
+@using DevCodeArchitect.Utilities
+@model CategoryNavItemModel
+@inject ApplicationDBContext _context
+
+@{
+    List<Categories>? categoryHierarchy = null;
+}
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+                    <h1 class="sub-banner-title">Documentation</h1>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li>Documentation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-12 order_md-1">
+                <div class="blog-sidebar">
+
+                    @{
+                        var Culture = "en";
+                        var cultureObj = ViewData["culture"];
+                        if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+                        {
+                            Culture = cultureStr;
+                        }
+                        var Docs = await CategoriesBLL.LoadItems(_context, new CategoryQueryEntity()
+                        {
+                            type = CategoryEnum.Types.Documentation,
+                            LoadAll = true,
+                            IsEnabled = Types.ActionTypes.Enabled,
+                            Culture = Culture,
+                            IsCache = true
+                        });
+
+                        if (Docs != null && Docs.Count > 0)
+                        {
+                            var hierarchyService = new CategoryHierarchyService();
+                            categoryHierarchy = hierarchyService.BuildHierarchy(Docs, 0);
+
+                            @if (categoryHierarchy != null && categoryHierarchy.Count > 0)
+                            {
+                                <div class="category-nav-container">
+                                    <nav class="navbar navbar-expand-md category-bg flex-column align-items-start">
+                                        <div class="offcanvas-body p-0 w-100">
+                                            <ul class="navbar-nav flex-column w-100 mb-4" id="categoryNav">
+                                                @{
+                                                    var firstParent = categoryHierarchy.FirstOrDefault();
+                                                    var currentTerm = Context.Request.Query["term"].ToString()
+                                                    ?? ViewBag.CurrentTerm as string
+                                                    ?? firstParent?.Term;
+                                                }
+                                                @foreach (var item in categoryHierarchy)
+                                                {
+                                                    @if (item.CategoryData != null)
+                                                    {
+                                                        var url = "/" + Culture + "/doc/" + item.Term;
+                                                        var isFirstParent = item == firstParent;
+                                                        var isActive = currentTerm == item.Term || (currentTerm == null && isFirstParent);
+                                                        var model = new CategoryNavItemModel
+                                                        {
+                                                            Item = item,
+                                                            Url = url,
+                                                            Level = 0,
+                                                            IsFirstParent = isFirstParent,
+                                                            Path = "/" + Culture + "/doc"
+                                                        };
+                                                        <partial name="_CategoryNavItem" model="model" />
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            }
+
+                        }
+
+                    }
+                   
+                </div>
+            </div>
+
+            <div class="col-xl-8 col-lg-8 col-md-12 order_md-2">
+
+                <div class="blog-list-main">
+                    <h1 class="mb-0">Welcome to MagicTradeBot</h1>
+                    <p class="banner-text-sm1">
+                        MagicTradeBot is a powerful, automated trading platform designed to help traders execute sophisticated strategies across multiple cryptocurrency exchanges with ease. Whether you're a beginner looking to automate your first trades or an experienced trader developing complex algorithms, MagicTradeBot provides the tools you need to succeed in today's fast-moving markets.
+                    </p>
+
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Key Features
+                        </h3>
+
+                        <div class="uvp-list uvp-list-sm">
+                            <ul>
+                                <li><strong>Multi-Exchange Trading:</strong> Connect and trade across multiple exchanges simultaneously</li>
+                                <li><strong>Automated Strategies:</strong> Implement pre-built templates or create your own custom strategies.</li>
+                                <li><strong>Risk Management Tools:</strong> Advanced stop-loss techniques and portfolio protection</li>
+                                <li><strong>Demo Mode:</strong> Test strategies risk-free with simulated trading</li>
+                                <li><strong>Self-Hosting Options:</strong> Maintain full control with our self-hosting capabilities</li>
+                            </ul>
+                        </div>
+                    </div>
+                   
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Getting Started
+                        </h3>
+
+                        <p class="mb-3">New to MagicTradeBot? Begin your journey with these essential guides:</p>
+
+                        <p class="mb-1">1: <a href="#">Introduction to the Platform</a> - Learn about MagicTradeBot's architecture and capabilities</p>
+                        <p class="mb-1">2: <a href="#">System Requirements</a> - Ensure your setup meets our specifications</p>
+                        <p class="mb-1">3: <a href="#">Installation Guide </a> - Step-by-step instructions to get MagicTradeBot running</p>
+                        <p class="mb-1">4: <a href="#">Initial Parameters </a> - Set up your first trading parameters</p>
+                    </div>
+                   
+
+                    <h2 class="mb-0">
+                        Explore Our Documentation
+                    </h2>
+
+                    <p class="banner-text-sm1">
+                        Navigate through our comprehensive documentation using the sidebar, or jump to popular sections:
+                    </p>
+
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Core Functionality
+                        </h3>
+
+                        <p class="mb-1">1: <a href="#">Connecting Exchanges</a> - Link your exchange accounts</p>
+                        <p class="mb-1">2: <a href="#">Multi-Exchange Trading</a> - Manage positions across platforms</p>
+                        <p class="mb-1">3: <a href="#">Demo Trading Mode </a> - Practice without risk</p>
+
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Advanced Features
+                        </h3>
+
+                        <p class="mb-1">1: <a href="#">Pre-Built Trading Templates</a> - Ready-to-use strategy templates</p>
+                        <p class="mb-1">2: <a href="#">Backtesting Strategies</a> - Test your strategies against historical data</p>
+                        <p class="mb-1">3: <a href="#">Smart Stop-Loss Techniques </a> - Advanced risk management</p>
+
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Support Resources
+                        </h3>
+
+                        <p class="mb-1">1: <a href="#">Common Errors & Fixes</a> - Troubleshoot common issues</p>
+                        <p class="mb-1">2: <a href="#">Video Tutorials</a> - Visual guides to key features</p>
+                        <p class="mb-1">3: <a href="#">Glossary of Terms </a> - Understand trading and platform terminology</p>
+
+                    </div>
+
+                    <div class="text-block">
+                        <h3 class="mb-3">
+                            Need Help?
+                        </h3>
+
+                        <p class="banner-text-sm1">
+                            Can't find what you're looking for? Check our <a href="#">FAQs & Community Resources</a> section or reach out to our support team through the official channels listed in your account dashboard.
+                        </p>
+
+                        <p class="banner-text-sm1">Happy trading with MagicTradeBot!</p>
+
+                    </div>
+
+                   
+                   
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

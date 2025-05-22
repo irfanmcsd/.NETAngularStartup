@@ -1,0 +1,19 @@
+<div class="row mb-3" *ngFor="let item of options; let j = index">
+  <div class="col-md-11">
+    <input
+      type="text"
+      placeholder="{{control.placeholder}}"
+      class="form-control"
+      [(ngModel)]="item.value"
+      (input)="onSearchChange(item.id, $event)"
+    />
+  </div>
+  <div class="col-md-1 mt-1">
+    <a class="text-danger font-18" href="#" (click)="removeOption(item, j, $event); false">
+      <i class="bx bx-x-circle"></i
+    ></a>
+  </div>
+</div>
+<div class="mb-3 ">
+  <a href="#" (click)="addOption($event); false" class="btn btn-success"><i class="bx bx-plus-circle"></i> Add</a>
+</div>

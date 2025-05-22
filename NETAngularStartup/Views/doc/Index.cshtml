@@ -1,0 +1,260 @@
+﻿@using DevCodeArchitect.DBContext
+@using DevCodeArchitect.Entity
+@using DevCodeArchitect.Utilities
+@model CategoryNavItemModel
+@inject ApplicationDBContext _context
+
+@{
+    var Culture = "en";
+    var cultureObj = ViewData["culture"];
+    if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+    {
+        Culture = cultureStr;
+    }
+    List<Categories>? categoryHierarchy = null;
+    Categories? Doc = null;
+    // Check if we have a search term and try to find matching documentation
+    var hasTerm = !string.IsNullOrEmpty(ViewData["term"] as string);
+    var docFound = false;
+
+    if (hasTerm)
+    {
+        var Term = ViewData["term"] as string;
+        var Documents = await CategoriesBLL.LoadItems(_context, new CategoryQueryEntity()
+                {
+                    Slug = Term,
+                    type = CategoryEnum.Types.Documentation,
+                    IsEnabled = Types.ActionTypes.Enabled,
+                    Culture = Culture
+                });
+
+        if (Documents != null && Documents.Count > 0)
+        {
+            Doc = Documents[0];
+        }
+
+    }
+
+}
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+
+                    @if (Doc != null && Doc.CategoryData != null)
+                    {
+                        if (!string.IsNullOrEmpty(Doc.CategoryData.SubTitle))
+                        {                           
+                            ViewData["pageTitle"] = Doc.CategoryData.SubTitle;
+                            <h1 class="sub-banner-title">@Doc.CategoryData.SubTitle</h1>
+                        }
+                        else
+                        {
+                            ViewData["pageTitle"] = Doc.CategoryData.Title;
+                            <h1 class="sub-banner-title">@Doc.CategoryData.Title</h1>
+                        }
+
+                    }
+
+                    <ul>
+                        <li><a href="/@Culture">Home</a></li>
+                        <li><a href="/@Culture/docs">Documentation</a></li>
+                        @if (Doc != null && Doc.CategoryData != null)
+                        {
+                            <li>@Doc.CategoryData.Title</li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-12 order_md-1">
+                <div class="blog-sidebar">
+
+                    @{
+                       
+                        var Docs = await CategoriesBLL.LoadItems(_context, new CategoryQueryEntity()
+                        {
+                            type = CategoryEnum.Types.Documentation,
+                            LoadAll = true,
+                            IsEnabled = Types.ActionTypes.Enabled,
+                            Culture = Culture,
+                            IsCache = true
+                        });
+
+                        if (Docs != null && Docs.Count > 0)
+                        {
+                            var hierarchyService = new CategoryHierarchyService();
+                            categoryHierarchy = hierarchyService.BuildHierarchy(Docs, 0);
+
+                            @if (categoryHierarchy != null && categoryHierarchy.Count > 0)
+                            {
+                                <div class="category-nav-container">
+                                    <nav class="navbar navbar-expand-md category-bg flex-column align-items-start">
+                                        <div class="offcanvas-body p-0 w-100">
+                                            <ul class="navbar-nav flex-column w-100 mb-4" id="categoryNav">
+                                                @{
+                                                    var firstParent = categoryHierarchy.FirstOrDefault();
+                                                    var currentTerm = ViewData["term"]
+                                                    ?? ViewData["term"] as string
+                                                    ?? firstParent?.Term;
+                                                }
+                                                @foreach (var item in categoryHierarchy)
+                                                {
+                                                    @if (item.CategoryData != null)
+                                                    {
+                                                        var url = "/" + Culture + "/doc/" + item.Term;
+                                                        var isFirstParent = item == firstParent;
+                                                        var isActive = string.Equals(currentTerm as string, item.Term, StringComparison.Ordinal) || (currentTerm == null && isFirstParent);
+                                                        var model = new CategoryNavItemModel
+                                                        {
+                                                            Item = item,
+                                                            Url = url,
+                                                            Level = 0,
+                                                            IsFirstParent = isFirstParent,
+                                                            Path = "/" + Culture + "/doc"
+                                                        };
+                                                        <partial name="_CategoryNavItem" model="model" />
+
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                            }
+
+                        }
+
+                    }
+
+                </div>
+            </div>
+
+            <div class="col-xl-8 col-lg-8 col-md-12 order_md-2">
+                <div class="blog-list-main">
+                    @{
+                            if (Doc != null)
+                            {
+                                if (Doc.CategoryData != null)
+                                {
+                                    docFound = true;
+                                    var categoryData = Doc.CategoryData;
+                                    <div class="documentation-content">
+                                        @*@if (!string.IsNullOrEmpty(categoryData.SubTitle))
+                                        {
+                                            ViewData["pageTitle"] = categoryData.SubTitle;
+                                            <h1 class="doc-title mb-2">@categoryData.SubTitle</h1>
+                                        }
+                                        else
+                                        {
+                                            ViewData["pageTitle"] = categoryData.Title;
+                                            <h1 class="doc-title mb-2">@categoryData.Title</h1>
+                                        }*@
+
+                                        <div class="text-block">
+                                            @Html.Raw(categoryData.Description)
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+
+
+                            @if (!docFound)
+                        {
+                            ViewData["pageTitle"] = "Page Not Found";
+
+                            <div class="not-found-content">
+                                <div class="error-header">
+
+                                    <h1 class="mb-3">Page Not Found</h1>
+                                    <div class="error-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
+                                        </svg>
+                                    </div>
+                                    <p class="lead mb-4">
+                                        We couldn't find the page you requested. It may have been moved or doesn't exist.
+                                    </p>
+                                </div>
+
+                                <div class="suggestions-container">
+                                    <div class="suggestions-block">
+                                        <h3 class="mb-3">Try these solutions:</h3>
+                                        <div class="suggestion-list">
+                                            <div class="suggestion-item">
+                                                <span class="suggestion-number">1</span>
+                                                <div>
+                                                    <strong>Check the URL</strong> for typos or errors
+                                                </div>
+                                            </div>
+                                            <div class="suggestion-item">
+                                                <span class="suggestion-number">2</span>
+                                                <div>
+                                                    <strong>Use the search</strong> at the top of the page
+                                                </div>
+                                            </div>
+                                            <div class="suggestion-item">
+                                                <span class="suggestion-number">3</span>
+                                                <div>
+                                                    <strong>Browse categories</strong> in the navigation menu
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="quick-links-block">
+                                        <h4 class="mb-3 mt-3">Popular Documentation Sections:</h4>
+                                        <div class="quick-links-grid">
+                                            <a href="/doc/en/introduction-to-the-platform" class="quick-link-card">
+                                                <div class="card-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="card-title">Getting Started</div>
+                                            </a>
+                                            <a href="/doc/en/self-hosting-guide" class="quick-link-card">
+                                                <div class="card-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V2zm6 11a1 1 0 1 0-2 0 1 1 0 0 0 2 0z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="card-title">Core Features</div>
+                                            </a>
+                                            <a href="/doc/en/common-errors-fixes" class="quick-link-card">
+                                                <div class="card-icon">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM4.5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm5 0h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm-5 4h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z" />
+                                                    </svg>
+                                                </div>
+                                                <div class="card-title">Troubleshooting</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="support-message">
+                                    <p>
+                                        Still can't find what you need? <a href="/contact">Contact our support team</a>
+                                        or visit our <a href="/community">community forums</a> for help.
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+        </div>
+    </div>
+</section>
+
+

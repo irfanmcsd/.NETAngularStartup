@@ -1,0 +1,71 @@
+﻿@using DevCodeArchitect.Utilities
+@*
+    Main layout template for Angular application
+    Features:
+    - Dark theme by default
+    - Angular routing support via base href
+    - Async sections for styles/scripts
+    - Modern ES module loading
+    - Progressive enhancement (noscript support)
+*@
+
+@{
+    // Set default values for null safety
+    var culture = ViewData[ViewDataKeys.Culture] as string ?? "en";
+    var pageTitle = ViewData[ViewDataKeys.Title] as string ?? "Account";
+    var baseUrl = ViewData[ViewDataKeys.BaseUrl] as string ?? "/account/";
+}
+
+<!DOCTYPE html>
+<html lang="@culture" class="semi-dark">
+<head>
+    <meta charset="UTF-8">
+    @* Responsive viewport configuration *@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    @* SEO meta tags - update values in SiteConfigurations *@
+    @*<meta name="description" content="@SiteConfigurations.MetaDescription">*@
+    <meta name="author" content="@ApplicationSettings.Author">
+
+    <title>@pageTitle</title>
+
+    @* Favicon - ensure multiple sizes are provided in production *@
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    @* Critical for Angular routing *@
+    <base href="@baseUrl">
+
+    @* Main application styles *@
+    <link rel="stylesheet" href="/app/account/browser/styles.css">
+
+    @* Optional page-specific styles *@
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+    @* Angular application root component will be rendered here *@
+    @RenderBody()
+
+    @* Progressive enhancement for JavaScript-disabled browsers *@
+    <noscript>
+        <div class="noscript-warning">
+            <h1>JavaScript Required</h1>
+            <p>This application requires JavaScript to function properly.</p>
+        </div>
+    </noscript>
+
+    @* Script loading strategy:
+        1. Polyfills first for browser compatibility
+        2. Framework scripts (Angular)
+        3. Main application script
+        4. Optional page-specific scripts
+    *@
+    <script src="/app/account/browser/polyfills.js" type="module"></script>
+    <script src="/app/account/browser/scripts.js" type="text/javascript"></script>
+    <script src="/app/account/browser/main.js" type="module"></script>
+
+    @* Optional page-specific scripts *@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

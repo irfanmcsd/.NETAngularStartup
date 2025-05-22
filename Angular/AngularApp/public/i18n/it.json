@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "Home"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Passa a Pro e sblocca tutta la potenza del software.",
+     "_RESTRICTED": "Questa app è solo a scopo dimostrativo. Il bot e altre funzionalità non funzioneranno."
+  },
+  "_UPGRADE": "Passa a Pro",
+  "_DOWNLOAD_NOW": "Scarica ora",
+  "_COPYRIGHT": "Copyright",
+  "_RESERVED": "Tutti i diritti riservati",
+  "_SELECT_LANGUAGE": "Seleziona lingua",
+  "_SERVER_IS_OFFLINE": "Server offline",
+  "_SERVER_OFFLINE_MESSAGE": "La chiamata API non risponde; il server potrebbe essere offline.",
+  "_UNKNOWN_ERROR": "Errore sconosciuto",
+  "_BAD_REQUEST": "Richiesta non valida",
+  "_RESPONSE_FAILED": "Risposta fallita",
+  "_RESPONSE_FAILED_MESSAGE": "Si è verificato un errore durante l'elaborazione della sua richiesta.",
+  "_ERROR_OCCURED": "Errore verificatosi",
+  "_ERROR_OCCURED_MESSAGE": "Si è verificato un errore durante l'elaborazione della sua richiesta."
+}

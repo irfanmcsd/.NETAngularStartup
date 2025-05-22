@@ -1,0 +1,9 @@
+﻿# First time executing the command
+dotnet ef migrations add InitialCreate -o Data
+
+# After making changes in entity
+dotnet ef migrations add V1.1.0-UpdateTables
+
+# commit updates
+dotnet ef database update
+

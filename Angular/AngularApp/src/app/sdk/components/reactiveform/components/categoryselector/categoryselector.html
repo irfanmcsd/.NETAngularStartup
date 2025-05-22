@@ -1,0 +1,31 @@
+<app-loader *ngIf="showLoader"></app-loader>
+<div *ngIf="!showLoader">
+   <div class="font-13 border border-3 p-4 rounded" *ngIf="categories.length > 0">
+      <div class="d-flex align-items-center mb-3">
+         <div class="category-sidebar" *ngFor="let box of categoryselection; let i = index">
+            <div class="mb-3">
+                <input type="text" (input)="onSearchChange()" class="form-control" [(ngModel)]="box.filterBy" placeholder="name" />
+            </div>
+            <div class="category-container">
+               <div class="list-group list-group-flush">
+                  <a href="#" [ngClass]="{ 'active': category.selected }"
+                    (click)="filter(box.categories, category, i, $event);false" class="list-group-item d-flex align-items-center" 
+                    *ngFor="let category of filterByTerm(box.categories, box.filterBy); trackBy: getKey">
+                     <span class="category-item">{{category.category_data.title}}</span>
+                      <i *ngIf="category.hasChilds" class="bx bx-chevron-right ms-3 font-20 ms-auto"></i>
+                  </a>
+               </div>
+            </div>
+         </div>
+         
+      </div>
+      <div class="font-13 mb-3">
+          Current selected: <span class="bg-success text-white me-2 p-1" *ngFor="let category of selectedCategories">{{ category.title }} </span>
+       
+      </div>
+      
+   </div>
+   <div *ngIf="categories.length === 0">
+       No categories found!
+   </div>
+</div>

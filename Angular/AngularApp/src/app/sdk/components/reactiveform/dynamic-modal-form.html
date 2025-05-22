@@ -1,0 +1,77 @@
+<app-loader *ngIf="showLoader"></app-loader>
+<div *ngIf="!showLoader">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" novalidate>
+    <div *ngFor="let control of controls">
+      <app-bootstrap-5
+        *ngIf="control.isVisible"
+        [navigationForm]="navigationForm"
+        (OnFileRemoved)="onFileRemoved($event)"
+        (OnDropdownSelectionChange)="onDropdownSelectionChange($event)"
+        (uploadStatus)="uploadProgress($event)"
+        (uploadCompleted)="uploadCompleted($event)"
+        (onFeatures)="onFeatureSubmit($event)"
+        [isSubmit]="isSubmit"
+        [control]="control"
+        [form]="form"
+      >
+      </app-bootstrap-5>
+    </div>
+    <!-- Navigation Button -->
+    <div class="d-grid" *ngIf="navigationForm">
+      <button class="btn btn-primary compose-mail-btn mt-2">
+        <i class="bx bx-search me-1"></i> {{ submitText }}
+      </button>
+    </div>
+    <div *ngIf="!navigationForm">
+      <div class="mt-3" *ngIf="!showLoader && !showModal">
+        <button
+          *ngIf="showCancel && !showModal"
+          class="btn btn-default me-1"
+          (click)="skip($event)"
+        >
+          {{ cancelText }}
+        </button>
+        <button
+          *ngIf="showCancel && showModal"
+          class="btn btn-default me-1"
+          (click)="close($event)"
+        >
+          {{ cancelText }}
+        </button>
+        <button
+          *ngIf="showSkip"
+          class="{{submitBtnCss}} me-1"
+          (click)="skip($event)"
+        >
+          {{ skipBtnText }}
+        </button>
+        <button
+          [attr.disabled]="!this.form.valid ? '' : null"
+          class="{{ submitBtnCss }} me-1"
+        >
+          {{ submitText }}
+        </button>
+      </div>
+
+      <div class="mt-2 mb-2" *ngIf="!showLoader && showModal">
+        <hr />
+        <button
+          *ngIf="showCancel"
+          class="btn btn-default me-1"
+          (click)="close($event)"
+        >
+          {{ cancelText }}
+        </button>
+        <button class="{{ submitBtnCss }} me-1">{{ submitText }}</button>
+        <button
+          [attr.disabled]="!this.form.valid ? '' : null"
+          *ngIf="skipBtnText !== ''"
+          class="btn btn-default"
+          (click)="skip($event)"
+        >
+          {{ skipBtnText }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

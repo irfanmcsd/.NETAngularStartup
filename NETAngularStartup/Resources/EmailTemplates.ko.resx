@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body { 
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif; 
+            line-height: 1.6;
+        }
+        .button { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background-color: #007BFF; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer { 
+            margin-top: 20px; 
+            font-size: 12px; 
+            color: #777; 
+        }
+        .header {
+            text-align: center;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="header"&gt;
+        &lt;h2&gt;보안을 위해 계정이 잠겼습니다&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;p&gt;{Username}님,&lt;/p&gt;
+    &lt;p&gt;귀하의 계정에서 여러 번의 로그인 시도 실패가 감지되어 보안을 위해 임시로 계정을 잠갔습니다.&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;계정 잠금 해제 방법:&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href="{UnlockLink}" class="button"&gt;계정 잠금 해제&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;이 링크는 {ExpiryTime}시간 후에 만료됩니다.&lt;/p&gt;
+    &lt;p&gt;본인이 시도한 것이 아니라면, &lt;a href="{ReportLink}"&gt;즉시 고객센터로 연락&lt;/a&gt; 주시기 바랍니다.&lt;/p&gt;
+    &lt;div class="footer"&gt;
+        &lt;p&gt;※ 본 메일은 자동 발송되는 메일이며, 회신이 불가능합니다.&lt;/p&gt;
+        &lt;p&gt;도움이 필요하시면 다음으로 문의해 주세요: &lt;a href="mailto:{SupportEmail}"&gt;{SupportEmail}&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="header"&gt;
+        &lt;h1&gt;{PageCaption}에 오신 것을 환영합니다!&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;p&gt;{UserName}님,&lt;/p&gt;
+    &lt;p&gt;아래 버튼을 클릭하여 이메일 주소를 인증해 주세요:&lt;/p&gt;
+    &lt;p&gt;&lt;a href="{ConfirmationLink}" class="button"&gt;이메일 인증하기&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;해당 링크는 {ExpiryHours}시간 후 만료됩니다.&lt;/p&gt;
+    &lt;div class="footer"&gt;
+        &lt;p&gt;문의: &lt;a href="mailto:{SupportEmail}"&gt;{SupportEmail}&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007BFF;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #777;
+        }
+        .warning {
+            color: #d9534f;
+            font-weight: bold;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="header"&gt;
+        &lt;h1&gt;비밀번호 재설정 요청&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;p&gt;{UserName}님, 안녕하세요.&lt;/p&gt;
+    &lt;p&gt;{PageCaption} 계정의 비밀번호 재설정 요청을 받았습니다.&lt;/p&gt;
+    &lt;p&gt;아래 버튼을 클릭하여 진행해 주세요:&lt;/p&gt;
+    &lt;p&gt;
+        &lt;a href="{ResetLink}" class="button"&gt;비밀번호 재설정&lt;/a&gt;
+    &lt;/p&gt;
+    &lt;p class="warning"&gt;이 링크는 {ExpiryHours}시간 후에 만료됩니다.&lt;/p&gt;
+    &lt;p&gt;만약 본인이 요청하지 않으셨다면, 이 이메일을 무시하거나 &lt;a href="{SupportLink}"&gt;고객 지원팀에 문의&lt;/a&gt;해 주세요.&lt;/p&gt;
+    &lt;div class="footer"&gt;
+        &lt;p&gt;보안을 위해 이 이메일을 타인과 공유하지 마세요.&lt;/p&gt;
+        &lt;p&gt;도움이 필요하신가요? 문의: &lt;a href="mailto:{SupportEmail}"&gt;{SupportEmail}&lt;/a&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+</root>

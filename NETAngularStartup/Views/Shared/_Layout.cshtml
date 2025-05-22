@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="@ViewData["culture"]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@(ViewData["metaDescription"] ?? ".NETAngularStartup - Startup Application - Running .NET 9 + Angular 19+")">
+    <!-- Title -->
+    <title>@(ViewData["Home"] != null ? $".NETAngularStartup - {ViewData["pageTitle"]}" : $"{ViewData["pageTitle"]} - .NETAngularStartup")</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+    @RenderSection("styles", required: false)
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <partial name="~/Views/Shared/_Header.cshtml" />
+   
+    <!-- Main Content -->
+    <main class="flex-grow-1 mt-5 pt-4">
+       @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <partial name="~/Views/Shared/_Footer.cshtml" />
+
+
+    <div id="disclaimerModal" class="modal fade" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Welcome to .NETAngularStartup</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="disclaimer-content">
+                        <h6 class="fw-bold mb-3">Important Disclaimer</h6>
+                        <p>The content on this website is for general informational purposes only. We make no guarantees about its accuracy or suitability for your specific needs. Use this site at your own risk. By continuing, you agree to these terms.</p>
+
+                        <h6 class="fw-bold mt-4 mb-3">Cookie Consent</h6>
+                        <p class="mb-3">We use cookies to enhance your experience, analyze traffic, and for functionality. By continuing, you consent to our use of cookies.</p>
+
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="analyticsCookies" checked>
+                            <label class="form-check-label ms-1" for="analyticsCookies">Analytics Cookies</label>
+                        </div>
+
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="marketingCookies">
+                            <label class="form-check-label ms-1" for="marketingCookies">Marketing Cookies</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" id="rejectCookies">Reject Non-Essential</button>
+                    <button type="button" class="btn btn-primary" id="acceptCookies">Accept & Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if disclaimer was already accepted
+            if (!localStorage.getItem('disclaimerAccepted')) {
+                const modal = new bootstrap.Modal(document.getElementById('disclaimerModal'));
+                modal.show();
+
+                // Set expiration date for the cookie (1 year)
+                const expirationDate = new Date();
+                expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+
+                // Handle accept button
+                document.getElementById('acceptCookies').addEventListener('click', function() {
+                    const analyticsAllowed = document.getElementById('analyticsCookies').checked;
+                    const marketingAllowed = document.getElementById('marketingCookies').checked;
+
+                    // Store preferences
+                    localStorage.setItem('disclaimerAccepted', 'true');
+                    localStorage.setItem('analyticsCookies', analyticsAllowed.toString());
+                    localStorage.setItem('marketingCookies', marketingAllowed.toString());
+
+                    // Set cookie
+                    document.cookie = `disclaimerAccepted=true; expires=${expirationDate.toUTCString()}; path=/`;
+
+                    // Initialize tracking based on preferences
+                    if (analyticsAllowed) initAnalytics();
+                    if (marketingAllowed) initMarketing();
+
+                    modal.hide();
+                });
+
+                // Handle reject button
+                document.getElementById('rejectCookies').addEventListener('click', function() {
+                    localStorage.setItem('disclaimerAccepted', 'true');
+                    localStorage.setItem('analyticsCookies', 'false');
+                    localStorage.setItem('marketingCookies', 'false');
+
+                    document.cookie = `disclaimerAccepted=true; expires=${expirationDate.toUTCString()}; path=/`;
+                    modal.hide();
+                });
+            }
+
+            function initAnalytics() {
+                // Initialize your analytics tools here (e.g., Google Analytics)
+                console.log('Analytics initialized');
+            }
+
+            function initMarketing() {
+                // Initialize marketing tools here (e.g., Facebook Pixel)
+                console.log('Marketing tools initialized');
+            }
+        });
+    </script>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

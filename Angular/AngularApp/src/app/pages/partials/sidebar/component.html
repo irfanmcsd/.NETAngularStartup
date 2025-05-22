@@ -1,0 +1,51 @@
+<div class="sidebar-wrapper" data-simplebar="true">
+  <div class="sidebar-header">
+    <!--<div>
+            <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
+        </div>-->
+    <div>
+      <h4 class="logo-text">{{appConfig.getConfig('title')}}</h4>
+    </div>
+    <div class="toggle-icon ms-auto"><i class="bx bx-arrow-back"></i></div>
+  </div>
+
+  <ul class="metismenu" id="menu">
+    <ng-template ngFor let-nav [ngForOf]="navigation">
+      <!-- No Sub Navigation -->
+      <li>
+        <a
+          [routerLink]="nav.url"
+          aria-label="item.title"
+          *ngIf="nav.sub_nav?.length === 0"
+        >
+          <div class="parent-icon"><i class="{{nav.icon}}"></i></div>
+          <div class="menu-title">{{nav.title}}</div>
+        </a>
+      </li>
+
+      <!-- Sub Navigation -->
+      <li
+        *ngIf="nav.sub_nav !== undefined && nav.sub_nav.length > 0"
+        [ngClass]="{ 'mm-active': !(nav.collapse ?? false) }"
+      >
+        <a href="javascript:;" class="has-arrow" (click)="toggleMenu(nav)">
+          <div class="parent-icon"><i class="{{nav.icon}}"></i></div>
+          <div class="menu-title">{{nav.title}}</div>
+        </a>
+        <ul [hidden]="nav.collapse">
+          <li *ngFor="let sub_nav of nav.sub_nav">
+            <a routerLink="{{sub_nav.url}}"
+              ><i class="bx bx-radio-circle"></i>{{sub_nav.title}}</a
+            >
+          </li>
+        </ul>
+      </li>
+    </ng-template>
+    <li>
+      <a href="/{{appConfig.culture}}/signout">
+        <div class="parent-icon"><i class="bx bx-log-out-circle"></i></div>
+        <div class="menu-title">Sign Out</div>
+      </a>
+    </li>
+  </ul>
+</div>

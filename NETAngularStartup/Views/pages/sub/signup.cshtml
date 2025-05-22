@@ -1,0 +1,132 @@
+﻿@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@model DevCodeArchitect.Entity.CreateAccountViewModel
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
+@{
+    var externalLoginProviderViewModel = new MediaSoft.Models.ExternalLoginProviderViewModel()
+    {
+        IsSignup = true
+    };
+}
+
+<section class="home-banner home-banner-2 home-banner-3" aria-labelledby="signup-heading">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                <div class="secondary-color p-4 p-md-5 rounded shadow-sm">
+                    <h1 class="mb-4 text-center login-heading">Create new Account</h1>
+
+                    <form id="authForm" asp-controller="Pages" asp-action="Register"
+                          asp-route-culture="@ViewData["culture"]"
+                          asp-route-page="@ViewData["page"]"
+                          asp-route-returnurl="@ViewData["ReturnUrl"]"
+                          method="post"
+                          class="needs-validation" novalidate>
+
+                        <partial name="_FormValidationErrors" />
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
+                        <div class="row gy-3">
+                            <!-- Name field -->
+                            <div class="col-12">
+                                <label asp-for="Name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" asp-for="Name" class="form-control"
+                                       placeholder="Enter your full name"
+                                       required aria-required="true"
+                                       autocomplete="name">
+                                <span asp-validation-for="Name" class="invalid-feedback"></span>
+                            </div>
+
+                            <!-- Email field -->
+                            <div class="col-12">
+                                <label asp-for="Email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" asp-for="Email" class="form-control"
+                                       placeholder="name@example.com"
+                                       required aria-required="true"
+                                       autocomplete="email">
+                                <span asp-validation-for="Email" class="invalid-feedback"></span>
+                            </div>
+
+                            <!-- Password field with toggle and strength meter -->
+                            <div class="col-12">
+                                <label asp-for="Password" class="form-label">Password <span class="text-danger">*</span></label>
+                                <div class="input-group mb-1">
+                                    <input type="password" asp-for="Password" class="form-control"
+                                           id="password-field"
+                                           required aria-required="true"
+                                           autocomplete="new-password"
+                                           oninput="checkPasswordStrength(this.value)">
+                                    <button class="btn btn-outline-secondary toggle-password" type="button"
+                                            aria-label="Show password"
+                                            data-target="password-field">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength-meter mb-3">
+                                    <div class="progress" style="height: 4px;">
+                                        <div id="password-strength-bar" class="progress-bar" role="progressbar"></div>
+                                    </div>
+                                    <small id="password-strength-text" class="form-text text-muted"></small>
+                                </div>
+                                <span asp-validation-for="Password" class="invalid-feedback"></span>
+                            </div>
+
+                            <!-- Confirm Password field with toggle -->
+                            <div class="col-12">
+                                <label asp-for="ConfirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" asp-for="ConfirmPassword" class="form-control"
+                                           id="confirm-password-field"
+                                           required aria-required="true"
+                                           autocomplete="new-password">
+                                    <button class="btn btn-outline-secondary toggle-password" type="button"
+                                            aria-label="Show password"
+                                            data-target="confirm-password-field">
+                                        <i class="bi bi-eye-slash"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="invalid-feedback"></span>
+                            </div>
+
+                            <!-- reCAPTCHA -->
+                            <div class="col-12 d-flex justify-content-center my-3">
+                                @(Html.Recaptcha<reCAPTCHA.AspNetCore.Versions.RecaptchaV3HiddenInput>(RecaptchaSettings?.Value))
+                            </div>
+
+                            <!-- Submit button -->
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <button class="btn btn-lg btn-primary g-recaptcha"
+                                            data-sitekey="@RecaptchaSettings.Value.SiteKey"
+                                            data-callback="onSubmit">
+                                        Create Account
+                                    </button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Already have account link -->
+                    <div class="mt-5">
+                        <hr class="mb-4 border-secondary-subtle">
+                        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                            <p class="mb-0">Already have an account?</p>
+                            <a asp-controller="Pages" asp-action="Index"
+                               asp-route-culture="@ViewData["culture"]"
+                               asp-route-page="signin"
+                               class="btn btn-outline-primary">
+                                Sign In
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Social login -->
+                    <div class="mt-4 pt-3 border-top">
+                        <partial name="_externalLoginProvider" model="externalLoginProviderViewModel" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,22 @@
+.category-toggle {
+    display: flex;
+    align-items: flex-end;
+    width: max-content;
+    padding: 10px 16px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: normal;
+    color: #333;
+    background-color: #e4e4e4;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.category-toggle:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #656565 !important;
+    color: #fff;
+}

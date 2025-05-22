@@ -1,0 +1,22 @@
+{
+  "_MENU": {
+    "_HOME": "홈"
+  }, 
+  "_MESSAGES": {
+     "_UPGRADE_PRO": "Pro로 업그레이드하여 소프트웨어의 모든 기능을 사용해 보세요.",
+     "_RESTRICTED": "이 앱은 데모용으로만 제공됩니다. 봇 및 기타 기능은 작동하지 않습니다."
+  },
+  "_UPGRADE": "업그레이드",
+  "_DOWNLOAD_NOW": "지금 다운로드",
+  "_COPYRIGHT": "저작권",
+  "_RESERVED": "All rights reserved",
+  "_SELECT_LANGUAGE": "언어 선택",
+  "_SERVER_IS_OFFLINE": "서버가 오프라인 상태입니다",
+  "_SERVER_OFFLINE_MESSAGE": "API 호출에 응답하지 않습니다. 서버가 오프라인 상태일 수 있습니다.",
+  "_UNKNOWN_ERROR": "알 수 없는 오류",
+  "_BAD_REQUEST": "잘못된 요청",
+  "_RESPONSE_FAILED": "응답 실패",
+  "_RESPONSE_FAILED_MESSAGE": "요청을 처리하는 중 오류가 발생했습니다.",
+  "_ERROR_OCCURED": "오류 발생",
+  "_ERROR_OCCURED_MESSAGE": "요청을 처리하는 중 오류가 발생했습니다."
+}

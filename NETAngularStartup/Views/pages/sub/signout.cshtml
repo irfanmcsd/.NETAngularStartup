@@ -1,0 +1,64 @@
+﻿@{
+    var Culture = "en";
+    var cultureObj = ViewData["culture"];
+    if (cultureObj is string cultureStr && !string.IsNullOrEmpty(cultureStr))
+    {
+        Culture = cultureStr;
+    }
+}
+<section class="sub-page-banner relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-banner text-center">
+                    <h1 class="sub-banner-title">Sign Out Successful</h1>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/@Culture/account">Account</a></li>
+                        <li>Sign Out</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="blog-list ptb-100 primary-color">
+    <div class="container">
+        <p class="banner-text-sm1">
+            You have been successfully signed out of your account.
+        </p>
+
+        <div class="text-block">
+            <h3 class="mb-3">
+                What You Can Do Next:
+            </h3>
+
+            <div class="uvp-list uvp-list-sm">
+                <ul>
+                    <li><strong>Return to Homepage</strong> - Explore our website as a guest</li>
+                    <li><strong>Sign Back In</strong> - Access your account again at any time</li>
+                    <li><strong>Close Browser</strong> - For added security, especially on shared devices</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-block">
+            <h4 class="mb-3">
+                Need Assistance?
+            </h4>
+
+            <div class="uvp-list uvp-list-sm">
+                <ul>
+                    <li>Experiencing login issues? <a href="/@Culture/contact">Contact Support</a></li>
+                    <li>Forgot your password? <a href="/@Culture/forgot-password">Reset Password</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/" class="btn btn-primary mr-3">Return to Homepage</a>
+            <a href="/@Culture/signin" class="btn btn-secondary">Sign In Again</a>
+        </div>
+    </div>
+</section>

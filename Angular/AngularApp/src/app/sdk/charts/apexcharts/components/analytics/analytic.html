@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-12 col-lg-3">
+      <!--<app-nav-buttons [Buttons]="Nav.Buttons" [isPrimary]="true" (Action)="toolbaraction($event)"></app-nav-buttons>-->
+      <div class="card">
+        <div class="card-body">
+          <dynamic-modal-form
+            *ngIf="!showLoader && Nav.Options.length > 0"
+            [navigationForm]="true"
+            [controls]="Nav.Options"
+            [showLoader]="showLoader"
+            [showCancel]="false"
+            [showModal]="false"
+            [submitText]="Nav.ButtonText"
+            (OnSubmit)="GenerateReport($event)"
+            (OnDropdownSelection)="onNavigationDropdownSelection($event)"
+          >
+          </dynamic-modal-form>
+          
+        </div>
+      </div>
+      <!-- Button List -->
+      <!--<app-nav-buttons [Buttons]="Nav.Buttons" (Action)="toolbaraction($event)"></app-nav-buttons>-->
+    </div>
+    <div class="col-12 col-lg-9">
+      <div class="card">
+        <div class="card-body">
+          <app-loader *ngIf="showLoader"></app-loader>
+           
+          <div *ngIf="!showLoader">
+          
+            <div *ngIf="DataLoaded">
+               <div *ngIf="Query.chart_type !== 'pie' && Query.chart_type !== 'donut'">
+                  
+                    <apx-chart
+                        [series]="chartOptions.series!"
+                        [chart]="chartOptions.chart!"
+                        [xaxis]="chartOptions.xaxis!"
+                        [yaxis]="chartOptions.yaxis!"
+                        [labels]="chartOptions.labels!"
+                        [dataLabels]="chartOptions.dataLabels!"
+                        [tooltip]="chartOptions.tooltip!"
+                        [legend]="chartOptions.legend!"
+                        [grid]="chartOptions.grid!"
+                        [stroke]="chartOptions.stroke!"
+                        [title]="chartOptions.title!"
+                        [subtitle]="chartOptions.subtitle!"
+                        [fill]="chartOptions.fill!"
+                        [plotOptions]="chartOptions.plotOptions!"
+                    ></apx-chart>
+                  </div>
+
+                  <div *ngIf="Query.chart_type === 'pie' || Query.chart_type === 'donut'">
+                   
+                    <apx-chart
+                        [series]="pieChartOptions.series!"
+                        [chart]="pieChartOptions.chart!"
+                        [labels]="pieChartOptions.labels!"
+                        [dataLabels]="pieChartOptions.dataLabels!"
+                        [responsive]="pieChartOptions.responsive!"
+                        [title]="chartOptions.title!"
+                    ></apx-chart>
+                  </div>
+            </div>
+            
+
+            <div class="text-center" style="padding:140px 0px" *ngIf="!DataLoaded">
+              <h5 *ngIf="RecordExist">Select options to generate a report</h5>
+              <h5 *ngIf="!RecordExist">No records found based on your selection.</h5>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

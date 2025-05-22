@@ -1,0 +1,45 @@
+<!-- 
+  Category Selector Modal Template
+  -------------------------------
+  This template provides a modal interface for category selection with:
+  - Header with title and close button
+  - Hidden input for form binding
+  - Category selector component integration
+-->
+
+<!-- Modal Header Section -->
+<div class="modal-header">
+  <!-- Modal Title -->
+  <h4 class="modal-title">{{ title }}</h4>
+  
+  <!-- Close Button -->
+  <button type="button" 
+          class="btn-close"
+          (click)="activeModal.dismiss('Cross click')"
+          aria-label="Close">
+  </button>
+</div>
+
+<!-- Modal Body Section -->
+<div class="modal-body">
+  <!-- 
+    Hidden Input
+    - Binds to controlValue using two-way binding
+    - Provides form integration while keeping the value hidden 
+  -->
+  <input type="hidden"
+         [(ngModel)]="controlValue"
+         [id]="controlKey" />
+
+  <!-- 
+    Category Selector Component
+    - options: Passes current selected value
+    - categoryOptions: Passes configuration from parent
+    - onChange: Handles selection changes
+  -->
+  <app-category-selector
+    [options]="controlValue"
+    [categoryOptions]="Info.data"
+    (onChange)="changeOption($event)">
+  </app-category-selector>
+</div>

@@ -1,0 +1,762 @@
+<div [formGroup]="form" [ngSwitch]="control.controlType">
+  <!-- Section -->
+  <div class="{{control.css}}" *ngSwitchCase="'section'">
+    <h5 [innerHTML]="control.label"></h5>
+    <p *ngIf="control.helpblock">{{ control.helpblock }}</p>
+    <hr />
+  </div>
+  <!-- Close Section -->
+
+  <!-- Textbox -->
+  <div
+    class="row mb-1 {{control.css}}"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'textbox'"
+  >
+    <div class="col {{control.colsize}}">
+      <label
+        *ngIf="control.label !== ''"
+        class="mb-1"
+        [ngClass]="{ 'is-invalid': hasErrors() }"
+        [attr.for]="control.key"
+        >{{ control.label }}</label
+      >
+
+      <div *ngIf="control.maskOptions.init !== undefined">
+        <div class="input-group" *ngIf="control.append_text !== ''">
+          <span class="input-group-text">{{control.append_text}}</span>
+          <input
+            [ngClass]="{ 'is-invalid': hasErrors() }"
+            placeholder="{{ control.placeholder }}"
+            [mask]="control.maskOptions.mask"
+            [showMaskTyped]="control.maskOptions.showMaskTyped"
+            (focusout)="onFocusOutEvent(control.key, control.labelGenerator, control.mapRender, $event)"
+            [(ngModel)]="control.value"
+            [attr.disabled]="control.disabled ? '' : null"
+            class="form-control"
+            [formControlName]="control.key"
+            autocomplete="off"
+            [id]="control.key"
+            [type]="control.type"
+          />
+        </div>
+        <input
+          [ngClass]="{ 'is-invalid': hasErrors() }"
+          *ngIf="control.append_text === ''"
+          [mask]="control.maskOptions.mask"
+          [showMaskTyped]="control.maskOptions.showMaskTyped"
+          (focusout)="onFocusOutEvent(control.key, control.labelGenerator, control.mapRender, $event)"
+          placeholder="{{ control.placeholder }}"
+          [attr.disabled]="control.disabled ? '' : null"
+          class="form-control"
+          [(ngModel)]="control.value"
+          [formControlName]="control.key"
+          autocomplete="off"
+          [id]="control.key"
+          [type]="control.type"
+        />
+      </div>
+      <div *ngIf="control.maskOptions.init === undefined">
+        <div class="input-group" *ngIf="control.append_text !== ''">
+          <span class="input-group-text">{{control.append_text}}</span>
+          <input
+            [ngClass]="{ 'is-invalid': hasErrors() }"
+            placeholder="{{ control.placeholder }}"
+            (focusout)="onFocusOutEvent(control.key, control.labelGenerator, control.mapRender, $event)"
+            [(ngModel)]="control.value"
+            [attr.disabled]="control.disabled ? '' : null"
+            class="form-control"
+            [formControlName]="control.key"
+            autocomplete="off"
+            [id]="control.key"
+            [type]="control.type"
+          />
+        </div>
+        <input
+          [ngClass]="{ 'is-invalid': hasErrors() }"
+          *ngIf="control.append_text === ''"
+          (focusout)="onFocusOutEvent(control.key, control.labelGenerator, control.mapRender, $event)"
+          placeholder="{{ control.placeholder }}"
+          [attr.disabled]="control.disabled ? '' : null"
+          class="form-control"
+          [(ngModel)]="control.value"
+          [formControlName]="control.key"
+          autocomplete="off"
+          [id]="control.key"
+          [type]="control.type"
+        />
+      </div>
+
+      <span *ngIf="control.helpblock" class="form-text"
+        >{{ control.helpblock }}</span
+      >
+      <div *ngIf="hasErrors()" class="invalid-feedback">
+        <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+      </div>
+    </div>
+  </div>
+  <!-- Close Textbox -->
+
+  <!-- Textbox List -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'textboxlist'"
+  >
+    <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let opt of control.checklist">
+        <input
+          [ngClass]="{ 'is-invalid': hasErrors() }"
+          placeholder="{{ opt.placeholder }}"
+          [attr.disabled]="opt.disabled ? '' : null"
+          class="form-control"
+          [(ngModel)]="control.value"
+          autocomplete="off"
+          [formControlName]="opt.key"
+          [id]="opt.key"
+          [type]="opt.type"
+        />
+      </div>
+    </div>
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Close Textbox List -->
+
+  <!-- Text Area -->
+  <div
+    class="row mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'textarea'"
+    style="position: relative"
+  >
+    <div
+      *ngIf="control.helpdescription !== ''"
+      style="position: absolute; right: 7px; top: 7px"
+    >
+      <div class="d-flex order-actions float-end">
+        <a
+          href="#"
+          (click)="helpLoader(control.helpdescription, $event); false"
+          style="font-size: 25px"
+          title="Help &amp; instructions for using this control"
+          ><i class="bx bx-help-circle"></i
+        ></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col {{control.colsize}}">
+        <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+        <textarea
+          [ngClass]="{ 'is-invalid': hasErrors() }"
+          rows="{{control.rows}}"
+          class="form-control"
+          placeholder="{{ control.placeholder }}"
+          [formControlName]="control.key"
+          [(ngModel)]="control.value"
+          [id]="control.key"
+        ></textarea>
+        <span *ngIf="control.helpblock" class="form-text"
+          >{{ control.helpblock }}</span
+        >
+        <div *ngIf="hasErrors()" class="invalid-feedback">
+          <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Close Text Area -->
+
+  <!-- Dropdown -->
+  <div
+    class="row mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'dropdown'"
+  >
+    <div class="spinner-border ms-1" *ngIf="control.loader" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="col {{control.colsize}}" *ngIf="!control.loader">
+      <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+      <select
+        class="form-select"
+        [attr.disabled]="control.disabled ? '' : null"
+        [ngClass]="{ 'is-invalid': hasErrors() }"
+        [id]="control.key"
+        [(ngModel)]="control.value"
+        (ngModelChange)="selectedDropdownValue(control.key, $event)"
+        [formControlName]="control.key"
+      >
+        <option
+          *ngFor="let opt of control.options; trackBy: getKey"
+          [value]="opt.key"
+        >
+          {{ opt.value }}
+        </option>
+      </select>
+      <span *ngIf="control.helpblock" class="form-text"
+        >{{ control.helpblock }}</span
+      >
+    </div>
+  </div>
+  <!-- Close Dropdown -->
+
+  <!-- Tinymyce Editor -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'tinymce'"
+  >
+    <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+    <div class="mb-3">
+      <quill-editor
+        [ngClass]="{ 'is-invalid': hasErrors() }"
+        class="content-editor quill-editor-container"
+        [formControlName]="control.key"
+        [modules]="control.tinymiceOptions"
+        [placeholder]="''"
+      >
+      </quill-editor>
+    </div>
+
+    <!--<editor
+        [ngClass]="{ 'is-invalid': hasErrors() }"
+        [formControlName]="control.key"
+        [id]="control.key"
+        [init]="control.tinymiceOptions"
+      ></editor>-->
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Close Tinymyce Editor -->
+
+  <!-- Multiple Dropdown -->
+  <div
+    class="row mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'multidropdown'"
+  >
+    <div class="col {{control.colsize}}">
+      <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+      <input
+        type="hidden"
+        [(ngModel)]="control.value"
+        [formControlName]="control.key"
+        [id]="control.key"
+      />
+      <app-multi-category
+        [categoryOptions]="control.multiselectOptions"
+        [control]="control"
+        [hasErrors]="hasErrors()"
+        (onChange)="changeOption($event)"
+      ></app-multi-category>
+
+      <span *ngIf="control.helpblock" class="form-text"
+        >{{ control.helpblock }}</span
+      >
+    </div>
+  </div>
+  <!-- Close Multiple Dropdown-->
+
+  <!-- Radiobutton List -->
+  <div
+    class="mb-2 {{control.css}}"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'radiolist'"
+  >
+    <div class="mb-1" *ngIf="control.labelasheading">
+      <h4>{{ control.label }}</h4>
+      <hr />
+    </div>
+    <label class="mb-1" *ngIf="!control.labelasheading" [attr.for]="control.key"
+      >{{ control.label }}</label
+    >
+    <div class="row">
+      <div *ngIf="control.inline" class="col {{control.colsize}}">
+        <div
+          class="form-check form-check-inline"
+          *ngFor="let opt of control.options;  trackBy: getKey"
+        >
+          <input
+            [ngClass]="{ 'is-invalid': hasErrors() }"
+            class="form-check-input"
+            type="radio"
+            value="{{ opt.key }}"
+            [id]="control.key"
+            [formControlName]="control.key"
+            [checked]="control.value == opt.key"
+            (change)="selectedDropdownValue(control.key, opt.key)"
+          />
+          <label class="form-check-label" [attr.for]="control.key"
+            >{{ opt.value }}</label
+          >
+        </div>
+      </div>
+      <div *ngIf="!control.inline" class="col {{control.colsize}}">
+        <div
+          class="form-check border border-3 p-1 rounded"
+          *ngFor="let opt of control.options;  trackBy: getKey"
+        >
+          <input
+            [ngClass]="{ 'is-invalid': hasErrors() }"
+            class="form-check-input"
+            type="radio"
+            value="{{ opt.key }}"
+            [id]="control.key"
+            [formControlName]="control.key"
+            [checked]="control.value == opt.key"
+            (change)="selectedDropdownValue(control.key, opt.key)"
+          />
+          <label class="form-check-label" [attr.for]="control.key"
+            >{{ opt.value }}
+            <span class="font-14" *ngIf="opt.description !== ''"
+              ><br />{{opt.description}}</span
+            >
+          </label>
+        </div>
+      </div>
+    </div>
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+  </div>
+  <!-- Close Radiobutton List -->
+
+  <!-- Checkbox List -->
+  <div
+    class="{{control.css}}"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'checklist'"
+  >
+    <div *ngIf="control.labelasheading">
+      <h4>{{ control.label }}</h4>
+      <hr />
+    </div>
+    <label class="mb-3" *ngIf="!control.labelasheading" [attr.for]="control.key"
+      >{{ control.label }}</label
+    >
+
+    <div class="row">
+      <div class="col">
+        <div
+          class="form-check form-check-inline"
+          *ngFor="let opt of control.checklist"
+        >
+          <input
+            class="form-check-input"
+            type="checkbox"
+            [id]="opt.key"
+            [(ngModel)]="opt.checked"
+            (change)="selectedDropdownValue(opt.key, opt.checked)"
+            value="{{ opt.value }}"
+            [formControlName]="opt.key"
+          />
+
+          <label class="form-check-label" [attr.for]="opt.key">
+            {{ opt.label }}</label
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Close Checkbox List -->
+
+  <!-- Check -->
+  <div class="{{control.css}}" *ngSwitchCase="'check'">
+    <div class="form-check-normal">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [(ngModel)]="control.checked"
+        value="{{ control.value }}"
+        [formControlName]="control.key"
+        (change)="selectedDropdownValue(control.key, control.checked)"
+        [id]="control.key"
+      />
+
+      <label class="form-check-label ms-1" [attr.for]="control.key">
+        {{ control.label }}
+      </label>
+    </div>
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Close Check -->
+
+  <!-- Uploader -->
+  <!--<div
+    class="card shadow-none border radius-15"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'uploader'"
+  >
+    <div class="card-body">
+      <div *ngIf="control.label != ''">
+        <label [attr.for]="control.key">{{ control.label }}</label>
+      </div>
+      <input
+        type="hidden"
+        [(ngModel)]="control.value"
+        [formControlName]="control.key"
+        [id]="control.key"
+      />
+
+      <div *ngIf="control.uploadoptions.sliderview">
+        <div class="row">
+          <div
+            class="col col-md-4 text-center"
+            *ngFor="let image of control.value;let i = index"
+          >
+            <a href (click)="selected(image, $event); (false)">
+              <img
+                [ngClass]="{ 'selected-item': image.selected }"
+                class="img-fluid img-thumbnail list-img"
+                [src]="image.url"
+                alt="{{image.filename}}"
+              />
+            </a>
+            <a
+              href
+              class="font-22 text-danger"
+              (click)="remove(image, i, $event); (false)"
+              ><i class="bx bx-message-square-x"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <app-plupload
+        *ngIf="uploadedFiles.length < control.uploadoptions.maxallowedfiles"
+        [options]="control.uploadoptions"
+        (onCompletion)="filesUploaded($event)"
+        (uploadProgress)="uploadProgress($event)"
+      ></app-plupload>
+
+      <span *ngIf="control.helpblock" class="form-text"
+        >{{ control.helpblock }}</span
+      >
+      <div *ngIf="hasErrors()" class="invalid-feedback">
+        <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+      </div>
+    </div>
+  </div>-->
+
+  <!-- Close Uploader -->
+
+  <!-- Cropper -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'cropper'"
+  >
+    <div *ngIf="control.label != ''">
+      <label class="mb-1" [attr.for]="control.key">{{ control.label }}</label>
+    </div>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+    <div *ngIf="control.cropperOptions.cropped_picture !== ''">
+      <div class="row">
+        <div class="col-sm-12 {{control.cropperOptions.colcss}}">
+          <img
+            class="img-fluid"
+            src="{{ control.cropperOptions.cropped_picture }}"
+            *ngIf="control.cropperOptions.cropped_picture !== ''"
+          />
+          <a
+            class="text-center mb-1 mt-1"
+            (click)="removeCropperImage($event); false"
+            ><i class="bx bx-message-square-x" aria-hidden="true"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+    <label
+      class="m-t-10 mb-1 text-center"
+      [attr.for]="control.cropperOptions.upload_id"
+      *ngIf="showUploadBtn"
+    >
+      <span class="{{ control.cropperOptions.btncss }}"
+        >{{ control.cropperOptions.uploadbtntext }}</span
+      >
+      <input
+        style="display: none"
+        [id]="control.cropperOptions.upload_id"
+        type="file"
+        (change)="changeListener($event)"
+      />
+    </label>
+
+    <div *ngIf="control.helpblock" class="form-text">
+      <small>{{ control.helpblock }}</small>
+    </div>
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Close Cropper -->
+
+  <!-- Google Map -->
+  <div class="mb-2" *ngSwitchCase="'google_map'">
+    <!--<label class="mt-1" [attr.for]="control.key">{{ control.label }}</label>-->
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+    <app-googlemap
+      [options]="control.options"
+      (onChange)="changeOption($event)"
+    ></app-googlemap>
+  </div>
+  <!-- Close Map -->
+
+  <!-- Multi Text Options -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'multitextoptions'"
+  >
+    <div *ngIf="control.label != ''">
+      <label [attr.for]="control.key">{{ control.label }}</label>
+    </div>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-multiple-options
+      [options]="control.value"
+      [control]="control"
+      (onChange)="changeOption($event)"
+    ></app-multiple-options>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Close Multi Text Options -->
+
+  <!-- Category Selector -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'categoryselector'"
+  >
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-category-selector
+      [options]="control.value"
+      [categoryOptions]="control.categoryOptions"
+      (onChange)="changeOption($event)"
+    >
+    </app-category-selector>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Inline Elements -->
+
+  <!-- Input Selector -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'inputselector'"
+  >
+    <label [attr.for]="control.key">{{ control.label }}</label>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-input-selector
+      [options]="control.value"
+      [categoryOptions]="control.categoryOptions"
+      (onChange)="changeOption($event)"
+    >
+    </app-input-selector>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Input Elements -->
+
+  <!-- Chip Selector -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'chipSelector'"
+  >
+    <label [attr.for]="control.key">{{ control.label }}</label>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-chips
+      [options]="control.value"
+      [categoryOptions]="control.categoryOptions"
+      (onChange)="changeOption($event)"
+    >
+    </app-chips>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Chips Selector -->
+  <!-- Label Generator -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'label_generator'"
+  >
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-label-generator
+      [options]="control.options"
+      (onChange)="changeOption($event)"
+    ></app-label-generator>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Label Generator -->
+
+  <!-- Auto Complete -->
+  <!--<div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'autocomplete'"
+  >
+    <label [attr.for]="control.key">{{ control.label }}</label>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+    <div class="{{control.colsize}}">
+      <app-autocomplete
+        [control]="control"
+        [hasErrors]="hasErrors()"
+        (onChange)="changeOption($event)"
+      ></app-autocomplete>
+    </div>
+
+    <div *ngIf="control.helpblock" class="form-text">
+      <small>{{ control.helpblock }}</small>
+    </div>
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>-->
+
+  <!-- Date Picker -->
+  <!--<div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'datepicker'"
+  >
+    <div class="col {{control.colsize}}">
+      <label *ngIf="control.label !== ''" class="mb-1" [attr.for]="control.key"
+        >{{ control.label }}</label
+      >
+      <div>
+        <dp-date-picker
+          theme="dp-material"
+          [id]="control.key"
+          [formControlName]="control.key"
+          [(ngModel)]="control.value"
+          [config]="control.datepickerOptions"
+        >
+        </dp-date-picker>
+      </div>
+
+      <span *ngIf="control.helpblock" class="form-text"
+        >{{ control.helpblock }}</span
+      >
+    </div>
+  </div>-->
+  <!-- Close Date Picker -->
+
+  <!-- Multi-Culture Category -->
+  <div
+    class="mb-2"
+    [ngClass]="{ 'is-invalid': hasErrors() }"
+    *ngSwitchCase="'culture_category'"
+  >
+    <label [attr.for]="control.key">{{ control.label }}</label>
+    <input
+      type="hidden"
+      [(ngModel)]="control.value"
+      [formControlName]="control.key"
+      [id]="control.key"
+    />
+
+    <app-culture-category
+      [options]="control.categoryOptions"
+      [tinymiceOptions]="control.tinymiceOptions"
+      (onChange)="changeOption($event)"
+    >
+    </app-culture-category>
+
+    <span *ngIf="control.helpblock" class="form-text"
+      >{{ control.helpblock }}</span
+    >
+    <div *ngIf="hasErrors()" class="invalid-feedback">
+      <span *ngFor="let error of listOfErrors()"> {{error}} </span>
+    </div>
+  </div>
+  <!-- Chips Selector -->
+</div>

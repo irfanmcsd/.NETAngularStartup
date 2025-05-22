@@ -1,0 +1,55 @@
+<nav>
+  <ul class="pagination round-pagination">
+    <li
+      *ngFor="let link of Links"
+      class="page-item"
+      [ngClass]="{ active: currentPage.toString() === link.id }"
+    >
+      <a
+        class="page-link"
+        *ngIf="link.name == 'First'"
+        (click)="page(link.id, $event); (false)"
+        title="{{ link.tooltip }}"
+        href
+        >First</a
+      >
+      <a
+        class="page-link"
+        *ngIf="link.name == 'Prev'"
+        (click)="page(link.id, $event); (false)"
+        title="{{ link.tooltip }}"
+        href
+        >Previous</a
+      >
+      <a
+        class="page-link"
+        *ngIf="
+            link.name != 'First' &&
+            link.name != 'Prev' &&
+            link.name != 'Next' &&
+            link.name != 'Last'
+          "
+        (click)="page(link.id, $event); (false)"
+        title="{{ link.tooltip }}"
+        href
+        >{{ link.name }}</a
+      >
+      <a
+        class="page-link"
+        *ngIf="link.name == 'Next'"
+        (click)="page(link.id, $event); (false)"
+        title="{{ link.tooltip }}"
+        href
+        >Next</a
+      >
+      <a
+        class="page-link"
+        *ngIf="link.name == 'Last'"
+        (click)="page(link.id, $event); (false)"
+        title="{{ link.tooltip }}"
+        href
+        >Last</a
+      >
+    </li>
+  </ul>
+</nav>

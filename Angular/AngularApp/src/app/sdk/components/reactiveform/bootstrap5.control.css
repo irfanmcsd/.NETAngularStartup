@@ -1,0 +1,14 @@
+.quill-editor-container {
+    height: 200px;
+    width: 100%;
+}
+
+.selected-item {
+    border: solid 2px #FF0000
+}
+
+.list-img {
+    height: 260px;
+    width: 100%;
+    object-fit: cover;
+}

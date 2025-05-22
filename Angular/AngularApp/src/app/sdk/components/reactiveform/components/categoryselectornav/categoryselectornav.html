@@ -1,0 +1,16 @@
+<div class="mt-3 mb-3" *ngIf="Selection.length === 0">
+   <button [disabled]="isDisabled" class="btn btn-outline-secondary px-5 radius-30" (click)="openModal($event); false">{{categoryOptions.label}}</button>
+</div>
+<div class="mt-3" *ngIf="Selection.length > 0">
+    <div class="mb-2">
+       <strong>{{categoryOptions.selected_label}}:</strong>
+    </div>
+  
+    <div class="mb-3">
+      <span class="bg-success text-white me-2 p-2" *ngFor="let service of Selection; let i = index">
+            {{service.title}} <span (click)="remove(service, i, $event)" class="bg-danger ms-2 p-1" style="cursor: pointer">&times;</span>
+      </span>
+    </div>
+   
+ 
+</div>

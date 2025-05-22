@@ -1,0 +1,29 @@
+﻿@inject IStringLocalizer<GeneralResource> GeneralResource
+@using DevCodeArchitect.Utilities;
+@{   
+    // Null-safe value extraction with fallbacks
+    var culture = ViewData[ViewDataKeys.Culture] as string ?? "en";
+    var isAuthenticated = ViewData[ViewDataKeys.IsAuthenticated] as bool? ?? false;
+}
+
+<!-- Header -->
+<header class="fixed-top bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light container">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">@ApplicationSettings.PageCaption</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/@culture">@GeneralResource["Home"]</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/@culture/features">@GeneralResource["Features"]</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/@culture/docs">@GeneralResource["Documentation"]</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/@culture/blog">@GeneralResource["Blog"]</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/@culture/contact">@GeneralResource["Contact"]</a></li>
+                    <li class="nav-item"><a class="btn btn-primary ms-2" href="/@culture/signup">@GeneralResource["Getting Started"]</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

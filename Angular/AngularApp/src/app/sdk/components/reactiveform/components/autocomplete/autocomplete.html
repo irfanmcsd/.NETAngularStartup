@@ -1,0 +1,25 @@
+<div class="ng-autocomplete" style="width:100%;">
+    <ng-autocomplete
+        [initialValue]="control.autocompleteOptions.initialValue"
+        [data]="control.autocompleteOptions.data"
+        [searchKeyword]="control.autocompleteOptions.keyword"
+        [isLoading]="control.autocompleteOptions.isLoading"
+        [minQueryLength]="control.autocompleteOptions.minQueryLength"
+        [placeholder]="control.autocompleteOptions.placeHolder"
+        [focusFirst]="true"
+        (selected)="selectEvent($event)"
+        (inputChanged)="onChangeSearch($event)"
+        (inputCleared)="clearEvent($event)"
+        [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate"
+    >
+    </ng-autocomplete>
+
+    <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.title"></a>
+    </ng-template>
+
+    <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="control.autocompleteOptions.notFoundText"></div>
+    </ng-template>
+</div>

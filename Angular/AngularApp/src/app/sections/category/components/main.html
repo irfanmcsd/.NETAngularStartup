@@ -1,0 +1,117 @@
+<div *ngIf="isAuthenticated">
+  <div *ngIf="!pageRole.admin">
+    <app-norecord [message]="'Access Restricted'"></app-norecord>
+  </div>
+
+  <div *ngIf="pageRole.admin">
+    <app-loader *ngIf="(loading$ | async)"></app-loader>
+    <div *ngIf="!(loading$ | async)">
+      <div class="d-flex justify-content-between mb-3">
+          <button (click)="back($event);" class="btn btn-secondary me-1">
+            Back to Listing
+          </button>
+           <button *ngIf="selectedDocument.id > 0" (click)="deleteRecord(selectedDocument, $event);" class="btn btn-secondary me-1">
+             Delete
+          </button>
+      </div>
+     
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card font-16">
+            <div class="card-body">
+              <div class="d-grid mb-3">
+                <a
+                  href="#"
+                  (click)="addDocument($event); false"
+                  class="btn btn-primary"
+                  >Add {{label}}</a
+                >
+              </div>
+
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="searchTerm"
+                  (input)="fllterCategories($event);"
+                  placeholder="Filter {{labels}}..."
+                />
+              </div>
+
+              <div class="d-grid mb-3" *ngIf="parentIds.length > 0">
+                <a
+                  href="#"
+                  (click)="navigateBack($event); false"
+                  class="btn btn-dark"
+                >
+                  <i class="bx bx-chevron-left"></i> Back
+                </a>
+              </div>
+
+              <div class="catmenu-container">
+                <div
+                  class="catmenu"
+                  *ngIf="((filteredNavList$ | async) ?? []).length > 0"
+                >
+                  <ul>
+                    <ng-container
+                      *ngTemplateOutlet="recursiveListTemplate; context: {list: (filteredNavList$ | async)}"
+                    >
+                    </ng-container>
+                  </ul>
+                </div>
+
+                <div
+                  class="text-center mt-4 mb-4"
+                  *ngIf="((filteredNavList$ | async) ?? []).length === 0"
+                >
+                  <p>No {{labels}} found!</p>
+                </div>
+              </div>
+
+              <ng-template #recursiveListTemplate let-list="list">
+                <li
+                  *ngFor="let nav of list; let j = index; let first = first; let last = last; trackBy: getKey"
+                >
+                  <a
+                    [ngClass]="{ 'selected': nav.id === this.selectedDocument.id}"
+                    class="d-flex"
+                    href="#"
+                    (click)="selectItem(list, nav, $event); false"
+                  >
+                    <i
+                      *ngIf="!nav.isnew"
+                      (click)="toggleMenuItems(nav, $event); false"
+                      class="bx bx-chevron-right me-1 bxicon"
+                    ></i>
+                    <span class="category-item">
+                      {{nav.category_data.title}}</span
+                    >
+                  </a>
+                </li>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="card font-16" *ngIf="controls.length > 0">
+            <div class="card-body">
+              <app-loader *ngIf="showLoader"></app-loader>
+              <div *ngIf="!showLoader">
+                <dynamic-modal-form
+                  [controls]="controls"
+                  [showLoader]="showLoader"
+                  [showCancel]="false"
+                  [showModal]="false"
+                  [submitText]="submitButtonText"
+                  (OnSubmit)="submitForm($event)"
+                >
+                </dynamic-modal-form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

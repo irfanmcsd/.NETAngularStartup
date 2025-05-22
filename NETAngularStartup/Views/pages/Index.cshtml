@@ -1,0 +1,193 @@
+﻿@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
+
+@{
+    var page = ViewData["page"]?.ToString();
+}
+
+@if (page == null)
+{
+    <h1>Page not found</h1>
+}
+else
+{
+    var partialViewPath = $"~/Views/pages/sub/{page}.cshtml";
+    var knownPages = new HashSet<string>
+    {
+        "home", "signin", "signup", "signout", "forgot", "faq",
+        "features", "templates", "lab", "demo", "plan",
+        "docs","download", "feedback", "privacy",
+        "terms", "contact", "about", "activate", "email_verified",
+        "email_not_verified", "reset_pass", "reset_pass_failed", "reset_pass_confirmed"
+    };
+
+    @if (page == "home")
+    {
+        <h1>Home</h1>
+    }
+    else if (knownPages.Contains(page))
+    {
+        try
+        {
+            <partial name="@partialViewPath" />
+        }
+        catch
+        {
+            <h1>Page not found</h1>
+        }
+    }
+    else
+    {
+        <h1>Page not found</h1>
+    }
+}
+
+
+
+@section Styles {
+    @if (page == "signup")
+    {
+        <style>
+            .password-strength-meter {
+            display: none;
+            }
+
+            .progress-bar {
+            transition: width 0.3s ease;
+            }
+        </style>
+    }
+
+}
+
+@section Scripts {
+
+    @if (page == "docs")
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            // Get current term from URL if not already set in ViewBag
+            var pathSegments = window.location.pathname.split('/');
+            var currentTerm = pathSegments[pathSegments.length - 1];
+
+            // If no specific category is selected, expand the first parent
+            if (!currentTerm || currentTerm === '') {
+            var firstParent = document.querySelector('#categoryNav > li:first-child [data-bs-toggle="collapse"]');
+            if (firstParent && firstParent.classList.contains('collapsed')) {
+            var collapseTarget = firstParent.getAttribute('href');
+            var collapseElement = document.querySelector(collapseTarget);
+            if (collapseElement) {
+            new bootstrap.Collapse(collapseElement, { toggle: true });
+            firstParent.classList.remove('collapsed');
+            firstParent.setAttribute('aria-expanded', 'true');
+            }
+            }
+            }
+            });
+        </script>
+    }
+    else if (page == "signup" || page == "signin")
+    {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            document.querySelectorAll('.toggle-password').forEach(function(button) {
+            button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordField = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+
+            // Toggle the type attribute
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Toggle the eye icon
+            icon.classList.toggle('bi-eye');
+            icon.classList.toggle('bi-eye-slash');
+
+            // Update the aria-label
+            const newLabel = type === 'password' ? 'Show password' : 'Hide password';
+            this.setAttribute('aria-label', newLabel);
+            });
+            });
+            });
+
+            function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('password-strength-bar');
+            const strengthText = document.getElementById('password-strength-text');
+            const strengthMeter = document.querySelector('.password-strength-meter');
+
+            // Show meter only when there's input
+            strengthMeter.style.display = password.length > 0 ? 'block' : 'none';
+
+            // Calculate strength
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            // Update UI
+            const strengthLevels = [
+            { width: '20%', class: 'bg-danger', text: 'Very Weak' },
+            { width: '40%', class: 'bg-warning', text: 'Weak' },
+            { width: '60%', class: 'bg-info', text: 'Moderate' },
+            { width: '80%', class: 'bg-primary', text: 'Strong' },
+            { width: '100%', class: 'bg-success', text: 'Very Strong' }
+            ];
+
+            const level = strengthLevels[Math.min(strength, strengthLevels.length - 1)];
+
+            strengthBar.style.width = level.width;
+            strengthBar.className = 'progress-bar ' + level.class;
+            strengthText.textContent = level.text;
+
+            // Check if passwords match
+            const confirmField = document.getElementById('confirm-password-field');
+            if (confirmField && confirmField.value.length > 0) {
+            validatePasswordMatch();
+            }
+            }
+
+            function validatePasswordMatch() {
+            const password = document.getElementById('password-field').value;
+            const confirmPassword = document.getElementById('confirm-password-field').value;
+            const confirmField = document.getElementById('confirm-password-field');
+
+
+            if (password && confirmPassword) {
+            if (password == confirmPassword) {
+            confirmField.nextElementSibling.textContent = 'Passwords matched';
+            confirmField.classList.remove('is-invalid');
+            } else {
+            confirmField.classList.add('is-invalid');
+            confirmField.nextElementSibling.textContent = 'Passwords do not match';
+            }
+
+            }
+            }
+
+            // Add event listener for confirm password field
+            document.getElementById('confirm-password-field')?.addEventListener('input', function() {
+            validatePasswordMatch();
+            });
+        </script>
+    }
+
+
+    @if (page == "signup" || page == "forgot" || page == "signin")
+    {
+       
+        <script src="https://www.google.com/recaptcha/api.js?render=@RecaptchaSettings.Value.SiteKey"></script>
+        <script>
+            function onSubmit(token) {
+                document.getElementById("g-recaptcha-response").value = token;
+                document.getElementById("authForm").submit();
+            }
+        </script>
+
+    }
+}

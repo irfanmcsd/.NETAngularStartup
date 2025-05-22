@@ -1,0 +1,58 @@
+﻿@inject IStringLocalizer<GeneralResource> GeneralResource
+@using DevCodeArchitect.Utilities;
+@{
+    // Null-safe value extraction with fallbacks
+    var culture = ViewData[ViewDataKeys.Culture] as string ?? "en";
+    var isAuthenticated = ViewData[ViewDataKeys.IsAuthenticated] as bool? ?? false;
+}
+
+<!-- Footer -->
+<footer class="bg-dark text-white mt-auto">
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h5>Startup</h5>
+                <p class="text-muted">© @DateTime.Now.Year Your Company. All rights reserved.</p>
+            </div>
+            <div class="col-md-2">
+                <h6>Product</h6>
+                <ul class="list-unstyled">
+                    <li><a href="/@culture/features" class="text-decoration-none text-white-50">@GeneralResource["Features"]</a></li>
+                    <li><a href="/@culture/pricing" class="text-decoration-none text-white-50">@GeneralResource["Pricing"]</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6>Company</h6>
+                <ul class="list-unstyled">
+                    <li><a href="/@culture/about" class="text-decoration-none text-white-50">@GeneralResource["About"]</a></li>
+                    <li><a href="/@culture/contact" class="text-decoration-none text-white-50">@GeneralResource["Contact"]</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6>Connect</h6>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@functions {
+    string GetLanguageName(string cultureCode)
+    {
+        return cultureCode switch
+        {
+            "en" => "English",
+            "fr" => "Français",
+            "de" => "Deutsch",
+            "es" => "Español",
+            "pt" => "Português",
+            "ja" => "日本語",
+            "zh" => "中文",
+            _ => "English"
+        };
+    }
+}

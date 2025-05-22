@@ -1,0 +1,70 @@
+<div class="card" *ngFor="let item of options.data; let j = index">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-10">
+        <div class="mb-1">
+          <select
+            class="form-select"
+            [(ngModel)]="item.culture"
+          >
+            <option
+              *ngFor="let opt of options.cultures;"
+              [value]="opt.key"
+            >
+              {{ opt.value }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-1">
+          <input
+            type="text"
+            placeholder="Enter culture specific title"
+            class="form-control"
+            [(ngModel)]="item.title"
+          />
+        </div>
+        <div class="mb-1" *ngIf="this.options.type === 0">
+          <input
+            type="text"
+            placeholder="Enter culture specific sub-title"
+            class="form-control"
+            [(ngModel)]="item.sub_title"
+          />
+        </div>
+        <div class="mb-1" *ngIf="this.options.type === 1">
+          <textarea
+            rows="4"
+            type="text"
+            placeholder="Enter culture specific short description"
+            class="form-control"
+            [(ngModel)]="item.short_description"
+          ></textarea>
+        </div>
+        <div class="mb-1">
+            <quill-editor
+                [(ngModel)]="item.description"
+                class="content-editor quill-editor-container"
+                [modules]="tinymiceOptions"
+                [placeholder]="''"
+            >
+            </quill-editor>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <a
+          class="btn btn-danger"
+          href="#"
+          (click)="removeOption(j, $event); false"
+        >
+          <i class="bx bx-x-circle"></i> Remove</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mb-3">
+  <button (click)="addOption($event)" class="btn btn-primary">
+    <i class="bx bx-plus-circle"></i> Add Culture
+  </button>
+</div>
+

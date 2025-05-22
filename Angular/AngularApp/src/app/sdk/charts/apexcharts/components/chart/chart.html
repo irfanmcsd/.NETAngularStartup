@@ -1,0 +1,70 @@
+<!--<div class="{{ContainerCss}}">
+    <div class="d-flex align-items-center mb-3" *ngIf="Title !== ''">
+      <h5 class="mb-0">{{Title}}</h5>
+      <div class="dropdown options ms-auto" *ngIf="showFilter">
+        <div
+          class="dropdown-toggle dropdown-toggle-nocaret"
+          data-bs-toggle="dropdown"
+        >
+          <i class="bx bx-dots-horizontal-rounded"></i>
+        </div>
+        <ul class="dropdown-menu" *ngIf="Filters.length > 0">
+          <li *ngFor="let opt of Filters; trackBy: getKey">
+            <a
+              class="dropdown-item"
+              href="javascript:;"
+              (click)="filterReport(opt.value, $event);"
+            >
+              {{ opt.title }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <app-loader *ngIf="showLoader"></app-loader>
+  
+    <div *ngIf="!showLoader">
+      <div class="chart-js-container1">
+  
+        <div *ngIf="!RecordExist">
+             <h5 style="padding: 100px 0px;">{{ Message }}</h5>
+        </div>
+        <div *ngIf="RecordExist">
+          <div
+          *ngIf="ChartType === 'column' || ChartType === 'bar' ||  ChartType === 'area' || ChartType === 'line' || ChartType === 'candlestick'"
+        >
+          <apx-chart
+            #chart
+            [series]="chartOptions.series!"
+            [chart]="chartOptions.chart!"
+            [xaxis]="chartOptions.xaxis!"
+            [yaxis]="chartOptions.yaxis!"
+            [labels]="chartOptions.labels!"
+            [dataLabels]="chartOptions.dataLabels!"
+            [tooltip]="chartOptions.tooltip!"
+            [legend]="chartOptions.legend!"
+            [grid]="chartOptions.grid!"
+            [stroke]="chartOptions.stroke!"
+            [title]="chartOptions.title!"
+            [subtitle]="chartOptions.subtitle!"
+            [fill]="chartOptions.fill!"
+            [plotOptions]="chartOptions.plotOptions!"
+          ></apx-chart>
+        </div>
+        <div *ngIf="ChartType === 'pie' || ChartType === 'donut'">
+          <apx-chart
+            [series]="pieChartOptions.series!"
+            [chart]="pieChartOptions.chart!"
+            [labels]="pieChartOptions.labels!"
+            [dataLabels]="pieChartOptions.dataLabels!"
+            [responsive]="pieChartOptions.responsive!"
+            [title]="chartOptions.title!"
+          ></apx-chart>
+        </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+-->

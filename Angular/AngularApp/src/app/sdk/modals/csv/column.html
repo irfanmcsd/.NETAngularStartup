@@ -1,0 +1,64 @@
+<!--<div class="modal-header">
+  <h4 class="modal-title">{{ title }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    (click)="activeModal.dismiss('Cross click')"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="scroll">
+  
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width:5%">-</th>
+              <th style="width: 5%">-</th>
+              <th>Column</th>
+              <th>Prefix</th>
+              <th>Format</th>
+            </tr>
+          </thead>
+          <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+            <tr *ngFor="let item of Columns; trackBy: getKey; let j = index">
+              <td class="listitem-box" cdkDrag>
+                 <i class="bx bx-grid-vertical"></i>
+              </td>
+              <td>
+                <input
+                  class="form-check-input"
+                  [(ngModel)]="item.selected"
+                  (ngModelChange)="select(item)"
+                  type="checkbox"
+                  [id]="item.id"
+                />
+                <label class="form-check-label" [attr.for]="item.id"></label>
+              </td>
+              <td>{{item.column}}</td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="item.prefix"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="item.format"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" (click)="submit()">Submit</button>
+</div>
+-->

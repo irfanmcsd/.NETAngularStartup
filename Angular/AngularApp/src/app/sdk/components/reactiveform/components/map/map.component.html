@@ -1,0 +1,40 @@
+<div class="mb-1" *ngIf="message !== ''">
+  {{ message }}
+</div>
+<div *ngIf="!options.enableMarkerWindow">
+  <div *ngIf="renderMap">
+    <google-map
+      height="{{ options.height }}"
+      width="{{ options.width }}"
+      [center]="center"
+      [zoom]="options.zoom"
+      (mapClick)="addMarker($event)"
+    >
+      <map-marker
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        [options]="markerOptions"
+      ></map-marker>
+    </google-map>
+  </div>
+</div>
+<div *ngIf="options.enableMarkerWindow">
+  <div *ngIf="renderMap">
+    <google-map
+      height="{{ options.height }}"
+      width="{{ options.width }}"
+      [center]="center"
+      [zoom]="options.zoom"
+      (mapClick)="addMarker($event)"
+    >
+      <map-marker
+        #marker="mapMarker"
+        *ngFor="let markerPosition of markerPositions"
+        [position]="markerPosition"
+        (mapClick)="openInfoWindow(marker)"
+        [options]="markerOptions"
+      ></map-marker>
+      <map-info-window>Info Window content</map-info-window>
+    </google-map>
+  </div>
+</div>
