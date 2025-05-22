@@ -82,7 +82,7 @@ A cutting-edge foundation for building secure, scalable web applications featuri
 - SQL Server 2022 / PostgreSQL 15  
 
 ### **Installation**  
-```bash
+
 # Clone repository
 git clone https://github.com/irfanmcsd/.NETAngularStartup.git
 
@@ -98,7 +98,7 @@ cd NETAngularStartup
 MIT License - See LICENSE.md
 
 
-### **Author Information**  
+## 🚀 Author Information  
 
 **Author**: **Muhammad Irfan**  
 🏆 *Senior Solution Architect*  
