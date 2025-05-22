@@ -98,6 +98,8 @@ cd NETAngularStartup
 MIT License - See LICENSE.md
 
 
+### **Author Information**  
+
 **Author**: **Muhammad Irfan**  
 🏆 *Senior Solution Architect*  
 🛠️ 20+ years of enterprise application development experience  
