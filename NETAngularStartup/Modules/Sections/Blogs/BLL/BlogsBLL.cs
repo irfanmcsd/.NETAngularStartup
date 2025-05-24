@@ -616,8 +616,184 @@ public static class BlogsBLL
 
         if (entity.AdvanceFilter)
         {
-            // Add advanced filtering logic here
-            // (omitted for brevity - see original implementation)
+            // if groupby not none (report query)
+            if (entity.GroupBy != BlogEnum.ChartGroupBy.None)
+            {
+                switch (entity.GroupBy)
+                {
+                    case BlogEnum.ChartGroupBy.Categories:
+                        predicate = predicate.And(p => p.CategoryContent != null && p.CategoryContent.Type == CategoryEnum.Types.Blogs);
+                        break;
+                }
+            }
+
+            // if category filter involve
+            if (!string.IsNullOrEmpty(entity.CategoryName) || entity.CategoryId > 0 || entity.CategoryIds != null)
+            {
+                // category content table can save multiple type of contents, we need only filter with company
+                predicate = predicate.And(p => p.CategoryContent != null && p.CategoryContent.Type == CategoryEnum.Types.Blogs);
+
+                if (!string.IsNullOrEmpty(entity.CategoryName))
+                {
+                    predicate = predicate.And(p => p.Category != null && p.CategoryData != null
+                    && (p.CategoryData.Title == entity.CategoryName // map with directory category name e.g Entertainment
+                    || p.Category.Term == entity.CategoryName // map with slug or term e.g /entertainment
+                    || p.Category.SubTerm == entity.CategoryName // map with complete slug or term e.g /company/graphics/rtx/rtx-3090
+                    ));
+                }
+                else if (entity.CategoryId > 0)
+                {
+                    predicate = predicate.And(p => p.Category != null && p.Category.Id == entity.CategoryId);
+                }
+                else if (entity.CategoryIds != null)
+                {
+                    foreach (var categoryid in entity.CategoryIds)
+                    {
+                        predicate = predicate.And(p => p.Category != null && p.Category.Id == categoryid);
+                    }
+                }
+            }
+
+            // Filter records by tag or label
+            if (!string.IsNullOrEmpty(entity.Tags))
+                predicate = predicate.And(p => p.Blog != null && p.Blog.Tags.Contains(entity.Tags));
+
+            // set condition to load only public company records
+            if (entity.IsPublic)
+            {
+                predicate = predicate.And(p => p.Blog != null
+                && p.Blog.IsEnabled == Types.ActionTypes.Enabled
+                   && p.Blog.IsApproved == Types.ActionTypes.Enabled
+                   && p.Blog.IsArchive == Types.ActionTypes.Disabled
+                );
+            }
+            else
+            {
+                // manual control on conditions for fetching company records
+
+                if (entity.IsEnabled != Types.ActionTypes.All)
+                    predicate = predicate.And(p => p.Blog != null && p.Blog.IsEnabled == entity.IsEnabled);
+
+                if (entity.IsApproved != Types.ActionTypes.All)
+                    predicate = predicate.And(p => p.Blog != null && p.Blog.IsApproved == entity.IsApproved);
+
+                if (entity.IsArchive != Types.ActionTypes.All)
+                    predicate = predicate.And(p => p.Blog != null && p.Blog.IsArchive == entity.IsArchive);
+            }
+
+            if (entity.IsFeatured != Types.FeaturedTypes.All)
+                predicate = predicate.And(p => p.Blog != null && p.Blog.IsFeatured == entity.IsFeatured);
+
+            if (!string.IsNullOrEmpty(entity.UserId))
+                predicate = predicate.And(p => p.Blog != null && p.Blog.UserId == entity.UserId);
+
+            if (!string.IsNullOrEmpty(entity.UserSlug))
+                predicate = predicate.And(p => p.User != null && p.User.Slug == entity.UserSlug);
+
+
+            // add more and more based on requirements...
+
+            var _date = UtilityHelper.TimeZoneOffsetDateTime();
+
+            // Filter records based on start and end dates
+
+            if (entity.StartDate != null)
+                predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= entity.StartDate.Value.Date);
+
+            if (entity.EndDate != null)
+                predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date <= entity.EndDate.Value.Date);
+
+
+            // Archive Expiry Filters
+            if (entity.ArchiveExpiry != Types.ArchiveExpiryOptions.All)
+            {
+                switch (entity.ArchiveExpiry)
+                {
+                    case Types.ArchiveExpiryOptions.Expired:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.ArchiveAt > _date && p.Blog.ArchiveAt <= _date.AddDays(1));
+                        break;
+
+                    case Types.ArchiveExpiryOptions.ExpireToday:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.ArchiveAt > _date.AddDays(-1));
+                        break;
+
+                    case Types.ArchiveExpiryOptions.Expire_in_5Days:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.ArchiveAt > _date.AddDays(-6));
+                        break;
+
+                }
+            }
+
+            // Add filter conditions for reporting and order management
+
+            if (entity.DateFilter != Types.DateFilter.All)
+            {
+                // start of month date
+
+                var start_date = new DateTime(_date.Year, _date.Month, 1);
+                switch (entity.DateFilter)
+                {
+                    case Types.DateFilter.Today:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt >= _date.AddDays(-1));
+                        break;
+                    case Types.DateFilter.ThisWeek:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt >= _date.AddDays(-7));
+                        break;
+                    case Types.DateFilter.ThisMonth:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt >= start_date.Date);
+                        break;
+                    case Types.DateFilter.PrevMonth:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= start_date.AddMonths(-1)
+                           && p.Blog.CreatedAt.Date < start_date.Date);
+                        break;
+
+                    case Types.DateFilter.CurrentPrevMonth:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= start_date.AddMonths(-1));
+                        break;
+
+                    case Types.DateFilter.PrevThreeMonths:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= start_date.AddMonths(-2));
+                        break;
+
+                    case Types.DateFilter.PrevSixMonths:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= start_date.AddMonths(-5));
+                        break;
+
+                    case Types.DateFilter.ThisYear:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Year >= start_date.Year);
+                        break;
+
+                    case Types.DateFilter.ThisHour:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt >= _date.AddHours(-1));
+                        break;
+
+                    case Types.DateFilter.LastSixHour:
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt >= _date.AddHours(-6));
+                        break;
+
+                    case Types.DateFilter.PrevYear:
+                        DateTime firsday = new DateTime(_date.Year, 1, 1);
+                        DateTime lastday = new DateTime(_date.Year, 12, 31);
+
+                        predicate = predicate.And(p => p.Blog != null && p.Blog.CreatedAt.Date >= firsday.AddYears(-1)
+                        && p.Blog.CreatedAt.Date < lastday.AddYears(-1));
+
+                        break;
+
+                }
+            }
+
+            // broad search
+            if (!string.IsNullOrEmpty(entity.Term))
+            {
+                predicate = predicate.And(p => p.Blog != null
+                   && (p.Data.Title.Contains(entity.Term)
+                   || p.Data.ShortDescription.Contains(entity.Term)
+                   || p.Data.Description.Contains(entity.Term)
+                   || p.Blog.Id.ToString() == entity.Term
+                   ));
+            }
+
         }
 
         return predicate;
