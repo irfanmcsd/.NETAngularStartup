@@ -219,7 +219,7 @@ public class TagsBLL
         {
             if (tag.Length >= 3 && tag.Length <= 40)
             {
-                var normalizedTag = UtilityHelper.ReplaceSpaceWithHyphen(tag);
+                var normalizedTag = UtilityHelper.ReplaceSpaceWithHyphen(tag.ToLower().Trim());
 
                 var exists = await Count(context, new TagQueryEntity()
                 {
@@ -234,7 +234,7 @@ public class TagsBLL
                 {
                     await Add(context, new Tags()
                     {
-                        Title = tag,
+                        Title = tag.Trim(),
                         Term = normalizedTag,
                         Type = type,
                         TagType = tagType,

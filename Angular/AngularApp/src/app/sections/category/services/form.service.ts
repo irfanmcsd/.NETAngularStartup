@@ -117,7 +117,7 @@ export class FormService {
     controls.push(
       new Controls.MultiCulture_Category({
         key: 'culture_categories',
-        categoryOptions: categoryOptions,
+        categoryOptions: JSON.parse(JSON.stringify(categoryOptions)) ,
         tinymiceOptions: this.coreService.prepareInitEditorSettings(),
         required: false,
         order: 5,

@@ -228,6 +228,7 @@ public static class CategoryContentsBLL
     public static async Task<List<CategoryItem>?> FetchContentCategoryList(
         ApplicationDBContext context,
         long contentId,
+        string culture,
         CategoryEnum.Types type)
     {
         if (contentId <= 0) return null;
@@ -242,7 +243,8 @@ public static class CategoryContentsBLL
                 category => category.Id,
                 (joined, category) => new { joined, category })
             .Where(p => p.joined.content.ContentId == contentId &&
-                       p.joined.content.Type == type)
+                       p.joined.content.Type == type && 
+                       p.joined.data.Culture == culture)
             .Select(p => new CategoryItem
             {
                 Id = p.category.Id,

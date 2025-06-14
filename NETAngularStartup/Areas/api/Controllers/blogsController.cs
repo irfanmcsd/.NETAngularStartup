@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NETAngularApp.Areas.api.Controllers
+namespace MagicTradeBot.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for managing blog operations including CRUD, listing, and bulk actions.
@@ -105,6 +105,7 @@ namespace NETAngularApp.Areas.api.Controllers
                 blog.CategoryList = await CategoryContentsBLL.FetchContentCategoryList(
                       _context,
                       query.Id,
+                      "en",
                       CategoryEnum.Types.Blogs);
 
 
@@ -142,6 +143,11 @@ namespace NETAngularApp.Areas.api.Controllers
                     ? await BlogsBLL.Add(_context, blog)
                     : await BlogsBLL.Update(_context, blog);
 
+                // process tags
+                if (!string.IsNullOrEmpty(blog.Tags))
+                {
+                    await TagsBLL.ProcessTags(_context, blog.Tags, TagEnum.Types.Blog, TagEnum.TagType.Normal);
+                }    
                 return Ok(new { status = "success", record = result });
             }
             catch (Exception ex)

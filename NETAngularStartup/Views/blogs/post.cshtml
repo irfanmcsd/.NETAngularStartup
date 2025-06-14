@@ -13,27 +13,53 @@
     List<Categories>? categoryHierarchy = null;
     Blogs? Blog = null;
     // Check if we have a search term and try to find matching documentation
-    var hasTerm = !string.IsNullOrEmpty(ViewData["term"] as string);
+    var hasTerm = !string.IsNullOrEmpty(ViewData["b_term"] as string);
     var docFound = false;
 
     if (hasTerm)
     {
-        var Term = ViewData["term"] as string;
+        var Term = ViewData["b_term"] as string;
         var Blogs = await BlogsBLL.LoadItems(_context, new BlogQueryEntity()
-            {
-                Slug = Term,
-                IsPublic = true,
-                Culture = Culture
-            });
+        {
+            Slug = Term,
+            IsPublic = true,
+            Culture = Culture
+        });
 
         if (Blogs != null)
         {
             docFound = true;
             Blog = Blogs[0];
+
+            if (Blog.BlogData != null)
+            {
+                ViewData["pageTitle"] = Blog.BlogData.Title;
+
+                string? desc = Blog.BlogData.ShortDescription;
+                if (desc == null)
+                {
+                    ViewData["metaDescription"] = string.Empty;
+                }
+                else
+                {
+                    desc = desc.Trim();
+                    if (desc.Length > 160)
+                    {
+                        int lastSpaceIndex = desc.LastIndexOf(' ', 159);
+                        if (lastSpaceIndex >= 0)
+                        {
+                            desc = desc.Substring(0, lastSpaceIndex).TrimEnd();
+                        }
+                        else
+                        {
+                            desc = desc.Substring(0, 160).TrimEnd();
+                        }
+                    }
+                    ViewData["metaDescription"] = desc;
+                }
+            }
         }
-
     }
-
 }
 
 <section class="sub-page-banner relative">
@@ -41,10 +67,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="page-banner text-center">
-                    <h1 class="sub-banner-title">Latest News & Blog</h1>
+                    @if (docFound && Blog.BlogData != null)
+                    {
+                        <h1 class="sub-banner-title">@Blog.BlogData.Title</h1>
+                    }
+
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li>Blog</li>
+                        <li><a href="/@Culture">Home</a></li>
+                        <li><a href="/@Culture/blog">Blog</a></li>
+                        <li>Detail</li>
                     </ul>
                 </div>
             </div>
@@ -123,7 +154,7 @@
 
                                     }
 
-                                    <div class="blog-detail-content">
+                                    <div class="blog-detail-content mb-4">
                                         <ul>
                                             <li>@Blog.CreatedAt.ToString("dd MMMM, yyyy")</li>
                                             @*<li>by John Doe</li>*@
@@ -131,55 +162,67 @@
                                         @Html.Raw(Blog.BlogData.Description)
                                     </div>
 
-                                    @* 
-                                     if (Post.category_list_values != null && Post.category_list_values.Count > 0)
-                                        {
-                                            <div>
-                                                <ul class="list-unstyled tag-list mb-0">
-                                                    @{
-                                                        foreach (var category in Post.category_list_values)
-                                                        {
-                                                            <li><a class="btn btn-soft-ash btn-sm rounded-pill mb-0" href="@CategoryUrlConfig.PrepareUrl(category.url, "blogs/")" rel="category">@category.title</a></li>
-                                                        }
-                                                    }
-                                                </ul>
-                                            </div>
-
-                                        }
-                                    *@
+                                  
 
                                     @if (!string.IsNullOrEmpty(Blog.Tags))
                                     {
-                                        <div class="blog-detail-tag-social">
-                                            <div class="blog-detail-tag d-flex flex-align">
-                                                <span>Tag by</span>
-                                                <ul>
+                                        <div class="blog-detail-tag-social mb-4">
+                                           
+                                                <p>Labels</p>
+                                                <ul class="tag-list">
                                                     @{
                                                         if (Blog.Tags.Contains(","))
                                                         {
                                                             var _tags = Blog.Tags.Split(char.Parse(","));
                                                             @foreach (var cat in _tags)
                                                             {
-                                                                var TagUrl = "/" + Culture + "/blog/tag/" + UtilityHelper.ReplaceSpaceWithHyphen(cat.ToString().ToLower());
-                                                                <li> <a class="btn btn-soft-ash btn-sm rounded-pill mb-0" href="@TagUrl">@cat.ToString()</a> </li>
+                                                                var TagUrl = "/" + Culture + "/blog/tag/" + UtilityHelper.ReplaceSpaceWithHyphen(cat.ToString().ToLower().Trim()) + "/";
+                                                                <li class="tag-item"> <a class="tag-link" href="@TagUrl">@cat.ToString()</a> </li>
                                                             }
                                                         }
                                                         else
                                                         {
-                                                            var TagUrl = "/" + Culture + "/blog/tag/" + UtilityHelper.ReplaceSpaceWithHyphen(Blog.Tags.ToLower());
-                                                            <li>
-                                                                <a class="btn btn-soft-ash btn-sm rounded-pill mb-0" href="@TagUrl">
+                                                            var TagUrl = "/" + Culture + "/blog/tag/" + UtilityHelper.ReplaceSpaceWithHyphen(Blog.Tags.ToLower().Trim()) + "/";
+                                                            <li class="tag-item">
+                                                                <a class="tag-link" href="@TagUrl">
                                                                     @Blog.Tags.ToString()
                                                                 </a>
                                                             </li>
                                                         }
                                                     }
-                                                    
+
                                                 </ul>
-                                            </div>
+                                           
 
                                         </div>
 
+                                    }
+
+                                    @{
+                                        var AssociatedCategories = await CategoryContentsBLL.FetchContentCategoryList(
+                                                                _context,
+                                                                Blog.Id,
+                                                                "en",
+                                                                CategoryEnum.Types.Blogs);
+
+                                        if (AssociatedCategories != null && AssociatedCategories.Count > 0)
+                                        {
+                                            <div class="blog-detail-tag-social mb-4">
+                                                 <p>Category</p>
+                                                 <ul class="tag-list">
+                                                    @foreach (var category in AssociatedCategories)
+                                                    {
+                                                        var CategoryUrl = "/" + Culture + "/blog/" + category.Term + "/";
+                                                        <li class="tag-item">
+                                                            <a class="tag-link" href="@CategoryUrl">
+                                                                @category.Title
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                 </ul>
+                                             </div>
+                                           
+                                        }
                                     }
                                   
                                     
@@ -229,17 +272,17 @@
                                                 {
                                                     @if (item.CategoryData != null)
                                                     {
-                                                        var url = "/" + Culture + "/blog/" + item.Term;
+                                                        var url = "/" + Culture + "/blog/" + item.Term + "/";
                                                         var isFirstParent = item == firstParent;
                                                         var isActive = string.Equals(currentTerm as string, item.Term, StringComparison.Ordinal) || (currentTerm == null && isFirstParent);
                                                         var model = new CategoryNavItemModel
-                            {
-                                Item = item,
-                                Url = url,
-                                Level = 0,
-                                IsFirstParent = isFirstParent,
-                                Path = "/" + Culture + "/blog"
-                            };
+                                                        {
+                                                            Item = item,
+                                                            Url = url,
+                                                            Level = 0,
+                                                            IsFirstParent = isFirstParent,
+                                                            Path = "/" + Culture + "/blog"
+                                                        };
                                                         <partial name="_CategoryNavItem" model="model" />
 
                                                     }

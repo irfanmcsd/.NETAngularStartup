@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Reflection.Emit;
 
 
 namespace DevCodeArchitect.DBContext
@@ -33,9 +34,24 @@ namespace DevCodeArchitect.DBContext
         public int Tags_Length { get; set; } = 500;
         public int Slug_Length { get; set; } = 50;
 
+        /*private string GetCurrentTimestampSql()
+        {
+            return Database.ProviderName switch
+            {
+                "Microsoft.EntityFrameworkCore.SqlServer" => "GETUTCDATE()",
+                "Npgsql.EntityFrameworkCore.PostgreSQL" => "NOW() AT TIME ZONE 'UTC'",
+                "Microsoft.EntityFrameworkCore.Sqlite" => "CURRENT_TIMESTAMP",
+                "Pomelo.EntityFrameworkCore.MySql" => "UTC_TIMESTAMP()",
+                _ => "CURRENT_TIMESTAMP"
+            };
+        }*/
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            // Then use in configuration:
+            //var currentTimestampSql = GetCurrentTimestampSql();
 
             // Customize DBContext => Table Field Attributes, Default Values, Mappings, Max Values etc
 
@@ -79,7 +95,7 @@ namespace DevCodeArchitect.DBContext
                 // Primary Key
                 b.HasKey(u => u.Id);
                 // Map with prefix table
-                b.ToTable(this.Table_Prefix + "Blogs"); 
+                b.ToTable(this.Table_Prefix + "Blogs");
 
                 b.Property(u => u.UserId).HasMaxLength(this.UserId_Length);
                 b.Property(u => u.Term).HasMaxLength(this.Title_Length);
@@ -90,7 +106,7 @@ namespace DevCodeArchitect.DBContext
                 b.Property(u => u.IsEnabled).HasDefaultValue(Types.ActionTypes.Enabled);
                 b.Property(u => u.IsApproved).HasDefaultValue(Types.ActionTypes.Enabled);
                 b.Property(u => u.IsDraft).HasDefaultValue(Types.DraftTypes.Normal);
-                b.Property(u => u.IsArchive).HasDefaultValue(Types.ActionTypes.Enabled);
+                b.Property(u => u.IsArchive).HasDefaultValue(Types.ActionTypes.Disabled);
                 b.Property(u => u.IsFeatured).HasDefaultValue(Types.FeaturedTypes.Basic);
 
                 b.Property(u => u.Views).HasDefaultValue(0);
@@ -104,7 +120,7 @@ namespace DevCodeArchitect.DBContext
                 b.HasKey(u => u.Id);
                 // Map with prefix table
                 b.ToTable(this.Table_Prefix + "BlogData");
-                              
+
                 b.Property(u => u.Title).HasMaxLength(this.Title_Length);
                 b.Property(u => u.Culture).HasMaxLength(10);
             });
@@ -136,6 +152,15 @@ namespace DevCodeArchitect.DBContext
                 b.Property(u => u.Priority).HasDefaultValue(0);
                 b.Property(u => u.IsEnabled).HasDefaultValue(Types.ActionTypes.Enabled);
                 b.Property(u => u.IsFeatured).HasDefaultValue(Types.FeaturedTypes.Basic);
+
+                /* b.Property(u => u.CreatedAt)
+                     .HasDefaultValueSql(currentTimestampSql)
+                     .ValueGeneratedOnAdd();
+
+                 b.Property(u => u.UpdatedAt)
+                     .HasDefaultValueSql(currentTimestampSql)
+                     .ValueGeneratedOnAddOrUpdate();*/
+
                 b.Property(u => u.Records).HasDefaultValue(0);
 
             });
@@ -199,6 +224,7 @@ namespace DevCodeArchitect.DBContext
                 b.Property(u => u.Records).HasDefaultValue(0);
             });
 
+        
         }
 
         public virtual DbSet<ApplicationUser> AspNetUsers { get; set; }
@@ -212,9 +238,9 @@ namespace DevCodeArchitect.DBContext
 
         public virtual DbSet<CategoryData> CategoryData { get; set; }
         public virtual DbSet<CategoryContents> CategoryContents { get; set; }
-       
+
         public virtual DbSet<ErrorLogs> ErrorLogs { get; set; }
-     
+
         public virtual DbSet<Tags> Tags { get; set; }
 
 

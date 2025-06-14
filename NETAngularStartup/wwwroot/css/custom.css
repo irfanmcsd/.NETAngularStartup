@@ -24,3 +24,46 @@
     background-color: #4f46e5;
     border-color: #4f46e5;
 }
+
+
+
+
+.tag-list {
+    list-style: none; /* Remove bullets */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margins */
+    display: flex; /* Enable flex layout */
+    flex-wrap: wrap; /* Allow tags to wrap to new line */
+    gap: 0.5rem; /* Space between tags */
+}
+
+.tag-item {
+    display: inline-block; /* Ensure proper tag sizing */
+}
+
+.tag-link {
+    display: block; /* Make entire area clickable */
+    padding: 0.35rem 0.85rem; /* Comfortable click area */
+    background: #f0f7ff; /* Light blue background */
+    color: #1a6bc9; /* Blue text */
+    border-radius: 4px; /* Rounded corners */
+    text-decoration: none; /* Remove underline */
+    font-size: 0.85rem; /* Slightly smaller text */
+    font-weight: 500; /* Medium weight */
+    border: 1px solid #d0e4ff; /* Light border */
+    transition: all 0.2s ease; /* Smooth transitions */
+}
+
+/* Hover/Active states */
+.tag-link:hover,
+.tag-link:active {
+    background: #d0e4ff; /* Lighter blue on hover */
+    color: #0d4a9e; /* Darker text color */
+    transform: translateY(-1px); /* Slight lift effect */
+}
+
+/* Focus state for accessibility */
+.tag-link:focus {
+    outline: 2px solid #1a6bc9;
+    outline-offset: 2px;
+}

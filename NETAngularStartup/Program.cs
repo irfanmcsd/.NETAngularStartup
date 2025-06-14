@@ -330,24 +330,48 @@ void ConfigureMiddlewarePipeline(WebApplication app)
 
 void ConfigureRoutes(WebApplication app)
 {
+    #region Sitemaps
+
+    app.MapControllerRoute(
+      name: "doc_sitemap",
+      pattern: "{culture}/doc/sitemap",
+      defaults: new { controller = "doc", action = "SiteMap" });
+
+    app.MapControllerRoute(
+     name: "blog_sitemap",
+     pattern: "{culture}/blog/sitemap",
+     defaults: new { controller = "blog", action = "SiteMap" });
+
+    #endregion
+
     #region Blog Routes
 
     // post page
     app.MapControllerRoute(
-        name: "blogs_tags_page",
-        pattern: "{culture}/post/{title}",
+        name: "blogs_detail_page",
+        pattern: "{culture}/post/{term}",
         defaults: new { controller = "blogs", action = "post" });
 
-    // blog categories
+    // blog tags
     app.MapControllerRoute(
         name: "blogs_tags_page",
         pattern: "{culture}/blog/tags/p-{pagenumber}",
         defaults: new { controller = "blogs", action = "tags" });
 
+    app.MapControllerRoute(
+       name: "blogs_tags_page",
+       pattern: "{culture}/blog/tags/",
+       defaults: new { controller = "blogs", action = "tags" });
+
     // blog categories
     app.MapControllerRoute(
         name: "blogs_category_page",
         pattern: "{culture}/blog/categories/p-{pagenumber}",
+        defaults: new { controller = "blogs", action = "categories" });
+
+    app.MapControllerRoute(
+        name: "blogs_category_page",
+        pattern: "{culture}/blog/categories/",
         defaults: new { controller = "blogs", action = "categories" });
 
     // search blogs
@@ -419,6 +443,7 @@ void ConfigureRoutes(WebApplication app)
         defaults: new { controller = "blogs", action = "index" });
 
     #endregion
+
 
     #region Sub Accounts
 

@@ -47,7 +47,9 @@ public static class CategoriesBLL
                 Type = entity.Type,
                 Priority = entity.Priority,
                 IsEnabled = entity.IsEnabled,
-                IsFeatured = entity.IsFeatured
+                IsFeatured = entity.IsFeatured,
+                CreatedAt = UtilityHelper.TimeZoneOffsetDateTime(),
+                UpdatedAt = UtilityHelper.TimeZoneOffsetDateTime()
             };
 
             context.Entry(newCategory).State = EntityState.Added;
@@ -86,6 +88,7 @@ public static class CategoriesBLL
             {
                 existingCategory.Priority = entity.Priority;
                 existingCategory.IsEnabled = entity.IsEnabled;
+                existingCategory.UpdatedAt = UtilityHelper.TimeZoneOffsetDateTime();
                 existingCategory.Avatar = await UploadMedia.ProcessCover(
                     context,
                     entity.Avatar,
@@ -411,7 +414,8 @@ public static class CategoriesBLL
             Term = p.Category.Term,
             SubTerm = p.Category.SubTerm,
             Records = p.Category.Records,
-            ParentId = p.Category.ParentId
+            ParentId = p.Category.ParentId,
+            UpdatedAt = p.Category.UpdatedAt
         };
 
         // fields will be available if 
@@ -585,6 +589,7 @@ public static class CategoriesBLL
             .Append(entity.type)
             .Append(entity.PageSize)
             .Append(entity.parentid)
+            .Append(entity.Culture)
             .Append(entity.LoadAll);
 
         if (!string.IsNullOrEmpty(entity.Order))

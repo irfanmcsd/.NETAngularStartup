@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace NETAngularApp.Areas.api.Controllers
+namespace MagicTradeBot.Areas.api.Controllers
 {
     /// <summary>
     /// API controller for managing categories and their related operations

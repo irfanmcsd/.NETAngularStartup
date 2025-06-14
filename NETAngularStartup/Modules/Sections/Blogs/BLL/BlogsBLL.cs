@@ -46,6 +46,7 @@ public static class BlogsBLL
                 IsApproved = entity.IsApproved,
                 IsDraft = entity.IsDraft,
                 CreatedAt = UtilityHelper.TimeZoneOffsetDateTime(),
+                UpdatedAt = UtilityHelper.TimeZoneOffsetDateTime(),
                 Cover = coverUrl
             };
 
@@ -448,11 +449,13 @@ public static class BlogsBLL
             Views = p.Blog.Views,
             Comments = p.Blog.Comments,
             IsFeatured = p.Blog.IsFeatured,
-            IsArchive = p.Blog.IsArchive
+            IsArchive = p.Blog.IsArchive,
+            Cover = p.Blog.Cover,
+            UpdatedAt = p.Blog.UpdatedAt
         };
 
         // this will return default thumb or cover url if user not updated avatar, cover yet
-        record.Cover = UploadMedia.GetImageUrl(p.Blog.Cover, BlogSettings.DefaultThumbnail);
+        //record.Cover = UploadMedia.GetImageUrl(p.Blog.Cover, BlogSettings.DefaultThumbnail);
 
         // fields will be available if 
         // list view or profile view
@@ -503,6 +506,7 @@ public static class BlogsBLL
             record.Author = new ApplicationUser()
             {
                 Id = p.User.Id,
+                FirstName = p.User.FirstName,
                 Avatar = p.User.Avatar
             };
 
@@ -598,6 +602,8 @@ public static class BlogsBLL
         BlogQueryEntity entity)
     {
         var predicate = PredicateBuilder.New<BlogQuery>(true);
+        if (string.IsNullOrEmpty(entity.Culture))
+            entity.Culture = "en"; // default
 
         if (entity.Id > 0)
         {
@@ -616,6 +622,11 @@ public static class BlogsBLL
 
         if (entity.AdvanceFilter)
         {
+            if (!string.IsNullOrEmpty(entity.Culture))
+            {
+                predicate = predicate.And(p => p.Data != null && p.Data.Culture == entity.Culture);
+            }
+
             // if groupby not none (report query)
             if (entity.GroupBy != BlogEnum.ChartGroupBy.None)
             {
@@ -632,7 +643,8 @@ public static class BlogsBLL
             {
                 // category content table can save multiple type of contents, we need only filter with company
                 predicate = predicate.And(p => p.CategoryContent != null && p.CategoryContent.Type == CategoryEnum.Types.Blogs);
-
+                // filter category by culture
+                predicate = predicate.And(p => p.CategoryData != null && p.CategoryData.Culture == entity.Culture);
                 if (!string.IsNullOrEmpty(entity.CategoryName))
                 {
                     predicate = predicate.And(p => p.Category != null && p.CategoryData != null
@@ -656,7 +668,11 @@ public static class BlogsBLL
 
             // Filter records by tag or label
             if (!string.IsNullOrEmpty(entity.Tags))
-                predicate = predicate.And(p => p.Blog != null && p.Blog.Tags.Contains(entity.Tags));
+            {
+                entity.Tags = UtilityHelper.ReplaceHyphensWithSpaces(entity.Tags);
+                predicate = predicate.And(p => p.Blog != null && !string.IsNullOrEmpty(p.Blog.Tags) && p.Blog.Tags.ToLower().Contains(entity.Tags));
+            }
+               
 
             // set condition to load only public company records
             if (entity.IsPublic)

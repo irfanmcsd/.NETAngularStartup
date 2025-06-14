@@ -438,10 +438,13 @@ export class MainCategoryComponent implements OnInit, OnDestroy {
        description: ''
     }
 
+    let _Data = JSON.parse(JSON.stringify(this.selectedDocument));
+
+
     // console.log('Form submitted:', this.selectedDocument);
     this.showLoader = true;
     this.categoryService
-      .ProcessRecord(this.selectedDocument)
+      .ProcessRecord(_Data)
       .pipe()
       .subscribe((response: CategoryReponse) => {
         if (response.status === 'error') {
@@ -463,17 +466,17 @@ export class MainCategoryComponent implements OnInit, OnDestroy {
               // add record
               this.selectedDocument.id = response.record.id;
               this.store.dispatch(
-                addCategoriesSuccess({ category: this.selectedDocument })
+                addCategoriesSuccess({ category:  _Data })
               );
             } else {
               // update record
 
               this.store.dispatch(
-                updateCategorySuccess({ category: this.selectedDocument })
+                updateCategorySuccess({ category: _Data })
               );
             }
 
-            this.selectedDocument = response.record;
+            //this.selectedDocument = response.record;
           }
 
           this.store.dispatch(

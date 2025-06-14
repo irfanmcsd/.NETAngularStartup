@@ -53,6 +53,19 @@ public class Categories
     public Types.ActionTypes IsEnabled { get; set; }
 
     /// <summary>
+    /// Flag indicating whether the category is enabled/active (0=disabled, 1=enabled)
+    /// </summary>
+    [JsonPropertyName("createAt")]
+    public DateTime? CreatedAt { get; set; }
+
+    /// <summary>
+    /// Flag indicating whether the category is enabled/active (0=disabled, 1=enabled)
+    /// </summary>
+    [JsonPropertyName("updateAt")]
+    public DateTime? UpdatedAt { get; set; }
+
+
+    /// <summary>
     /// Flag indicating if the category is featured (0=normal, 1=featured)
     /// </summary>
     [JsonPropertyName("isfeatured")]

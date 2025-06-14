@@ -112,8 +112,13 @@ public class BlogHelper
         // if search not enabled
         if (entity.SearchSource == 0)
         {
-            // set page title 
+            // Set page heading
             BlogTitleHelper.Generate(ListEntity, entity);
+            // Set page meta title
+            BlogTitleHelper.GenerateMetaTitle(ListEntity, entity);
+            // Set page meta description
+            BlogTitleHelper.GenerateMetaDescription(ListEntity, entity);
+
 
             // set pagination links
             ListEntity.DefaultUrl = PaginationUtil.SetDefaultUrl();

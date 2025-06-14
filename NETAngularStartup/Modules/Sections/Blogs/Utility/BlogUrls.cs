@@ -23,8 +23,25 @@ public static class BlogUrls
     /// Gets the base URL for the blog section
     /// </summary>
     /// <returns>The relative URL path for blogs ("/blogs")</returns>
-    public static string GetUrl(string culture) => $"/blogs/{culture}";
+    public static string GetUrl(string culture) => $"{ApplicationSettings.Domain.Backend}{culture}/blog/";
 
+    /// <summary>
+    /// Gets the base URL for the blog section
+    /// </summary>
+    /// <returns>The relative URL path for blogs ("/blogs")</returns>
+    public static string GetSearchUrl(string culture, string term) => $"/{culture}/blog/q/{term}";
+
+    /// <summary>
+    /// Gets the base URL for the blog section
+    /// </summary>
+    /// <returns>The relative URL path for blogs ("/blogs")</returns>
+    public static string GetAuthorUrl(string culture, string author) => $"/{culture}/blog/author/{author}";
+
+    /// <summary>
+    /// Gets the base URL for the blog section
+    /// </summary>
+    /// <returns>The relative URL path for blogs ("/blogs")</returns>
+    public static string GetPostUrl(string culture, string term) => $"{ApplicationSettings.Domain.Backend}{culture}/post/{term}";
     #endregion
 
     #region Tag/Label URLs
@@ -33,7 +50,7 @@ public static class BlogUrls
     /// Gets the base URL for blog tags
     /// </summary>
     /// <returns>The relative URL path for blog tags ("/blogs/tags")</returns>
-    public static string GetLabelUrl(string culture) => $"/blogs/tags/{culture}";
+    public static string GetLabelUrl(string culture) => $"/{culture}/blog/tags/";
 
     /// <summary>
     /// Generates a URL for a specific blog tag
@@ -42,7 +59,7 @@ public static class BlogUrls
     /// <returns>
     /// Formatted URL path: "/blogs/tag/{label}"
     /// </returns>
-    public static string GetLabelUrl(string? culture, string? label) => $"/blogs/tag/{culture}/{label}";
+    public static string GetLabelUrl(string? culture, string? label) => $"/{culture}/blog/tag/{label}";
 
     #endregion
 
@@ -56,7 +73,7 @@ public static class BlogUrls
     /// Formatted URL path: "/blogs/type/{featuredType}"
     /// </returns>
     public static string GetFeaturedUrl(string culture, Types.FeaturedTypes? featured)
-        => $"/blogs/type/{culture}/{Types.ParseFeaturedTypes(featured)}";
+        => $"/{culture}/blog/type/{Types.ParseFeaturedTypes(featured)}";
 
     #endregion
 

@@ -8,6 +8,14 @@ namespace DevCodeArchitect.Utilities;
 /// </summary>
 public static class CategoryUrls
 {
+
+    /// <summary>
+    /// Gets the base URL for the blog section
+    /// </summary>
+    /// <returns>The relative URL path for blogs ("/blogs")</returns>
+    public static string GetPostUrl(string culture, string directory, string term) => $"{ApplicationSettings.Domain.Backend}{culture}/{directory}/{term}";
+
+
     /// <summary>
     /// Constructs a basic category URL in the format: {path}/{categoryName}
     /// </summary>

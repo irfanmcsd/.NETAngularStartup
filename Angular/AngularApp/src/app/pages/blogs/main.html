@@ -95,10 +95,11 @@
                             <p class="mb-1">
                               Posted: {{ item.created_at | date: "fullDate" }}
                               by
+                            
                               <a
                                 [routerLink]="['/users/profile/' + item.author.id]"
                               >
-                                {{item.author.fullName}}
+                                {{item.author.firstName}}
                               </a>
                             </p>
                           </td>

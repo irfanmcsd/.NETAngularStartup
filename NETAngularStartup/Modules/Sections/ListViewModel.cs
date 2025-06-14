@@ -7,6 +7,16 @@ public class ListViewModel
     /// <summary>
     /// Set main heading title (listing)
     /// </summary>
+    public string? MetaTitle { get; set; }
+
+    /// <summary>
+    /// Set main heading title (listing)
+    /// </summary>
+    public string? MetaDescription { get; set; }
+
+    /// <summary>
+    /// Set main heading title (listing)
+    /// </summary>
     public string? HeadingTitle { get; set; }
 
     /// <summary>
@@ -80,12 +90,13 @@ public class ListViewModel
 
 }
 
-public enum ListType {
+public enum ListType
+{
     Grid = 0,
     List = 1,
     Links = 2,
     Map_Half = 3,
-    Map_Full =4
+    Map_Full = 4
 }
 /// <summary>
 /// Core model for handling breadcrum on pages
@@ -111,4 +122,6 @@ public class BreadItem
     public int Id { get; set; }
     public string? Title { get; set; }
     public string? Url { get; set; }
+
+    public bool isActive { get; set; } = true;
 }

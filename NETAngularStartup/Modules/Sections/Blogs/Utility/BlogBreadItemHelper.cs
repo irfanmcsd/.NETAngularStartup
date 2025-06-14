@@ -14,23 +14,26 @@ public class BlogBreadItemHelper
         // add Blogs link [Home | Blogs]
         breadItems.Add(new BreadItem() { Url = BlogUrls.GetUrl(entity.Culture ?? "en"), Title = "Blogs" });
 
-        // category bread items
-        processCategoryBreadItems(breadItems, entity);
-
+        if (!string.IsNullOrEmpty(entity.CategoryName))
+        {
+            // [Home | Blogs | Category]
+            processCategoryBreadItems(breadItems, entity);
+        }
+      
         // search
-        /*if (!string.IsNullOrEmpty(entity.term))
-            breadItems.Add(new BreadItem() { url = PropertyUrls.getSearchUrl(entity.term), title = UtilityHelper.setTitle(entity.term) });
+        if (!string.IsNullOrEmpty(entity.Term))
+            breadItems.Add(new BreadItem() { Url = BlogUrls.GetSearchUrl(entity.Culture ?? "en", entity.Term), Title = UtilityHelper.SetTitle(entity.Term) });
 
        
         // author posts
-        if (!string.IsNullOrEmpty(entity.user_slug))
+        if (!string.IsNullOrEmpty(entity.UserSlug))
         {
             // [Home | Blogs | Author]
-            breadItems.Add(new BreadItem() { url = UserUrls.getUrl(), title = "Author" });
+            breadItems.Add(new BreadItem() { Url = UserUrls.GetUrl(), Title = "Author" });
 
             // [Home | Blogs | Author | Agent
-            breadItems.Add(new BreadItem() { url = PropertyUrls.getAgentUrl(entity.user_slug), title = UtilityHelper.setTitle(entity.user_slug) });
-        }*/
+            breadItems.Add(new BreadItem() { Url = BlogUrls.GetSearchUrl(entity.Culture ?? "en", entity.UserSlug), Title = UtilityHelper.SetTitle(entity.UserSlug) });
+        }
 
         // author posts
         if (!string.IsNullOrEmpty(entity.Label))
@@ -52,6 +55,13 @@ public class BlogBreadItemHelper
         // page number bread items
         if (entity.PageNumber != null && entity.PageNumber > 1)
             breadItems.Add(new BreadItem() { Url = "#", Title = "Page - " + entity.PageNumber });
+
+
+        if (breadItems?.Count > 0)
+        {
+            breadItems[^1].isActive = false;  // Modern index-from-end operator (C# 8+)
+            //breadItems[breadItems.Count - 1].isActive = false;
+        }
 
         listentity.BreadItems = breadItems;
     }

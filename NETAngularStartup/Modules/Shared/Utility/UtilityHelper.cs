@@ -13,6 +13,15 @@ public static class UtilityHelper
 {
     #region String Manipulation
 
+    public static string RemoveCulturePrefix(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        string pattern = @"^[a-zA-Z][a-zA-Z-]+/";
+        return Regex.Replace(input, pattern, string.Empty);
+    }
+
     public static string StripCurlyBraces(this string input)
     {
         if (string.IsNullOrEmpty(input))
@@ -63,6 +72,18 @@ public static class UtilityHelper
         str = Regex.Replace(str, @"[^0-9a-zA-Z\-_.]+", "");
 
         return str;
+    }
+
+    public static string ReplaceHyphensWithSpaces(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        // Replace various hyphen/dash characters
+        return input
+            .Replace('-', ' ')     // Regular hyphen
+            .Replace('–', ' ')     // En-dash
+            .Replace('—', ' ');    // Em-dash
     }
 
     /// <summary>

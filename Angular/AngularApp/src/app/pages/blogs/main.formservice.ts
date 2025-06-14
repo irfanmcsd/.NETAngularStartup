@@ -108,7 +108,7 @@ export class FormService {
       new Controls.MultiCulture_Category({
         key: 'blog_culture_data',
         categoryOptions: dataOptions,
-        tinymiceOptions: this.coreService.prepareInitEditorSettings(),
+        tinymiceOptions: this.coreService.prepareInitAdvacneEditorSettings(),
         required: false,
         order: 5,
         helpblock: '',

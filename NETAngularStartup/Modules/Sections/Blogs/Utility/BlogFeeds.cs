@@ -26,9 +26,24 @@ public class BlogFeeds
                 {
                     str.Append($$"""
                         <url>
-                          <loc>{{feed.Url}}</loc>
-                          <lastmod>{{feed.UpdatedAt}}</lastmod>
-                        </url> 
+                           <loc>{{BlogUrls.GetPostUrl("en", feed.Term)}}</loc>
+                           <lastmod>{{feed.UpdatedAt}}</lastmod>
+
+                           <xhtml:link rel="alternate" hreflang="en" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="de" href="{{BlogUrls.GetPostUrl("de", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="fr" href="{{BlogUrls.GetPostUrl("fr", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="it" href="{{BlogUrls.GetPostUrl("it", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="es" href="{{BlogUrls.GetPostUrl("es", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="ru" href="{{BlogUrls.GetPostUrl("ru", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="zh" href="{{BlogUrls.GetPostUrl("zh", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="ja" href="{{BlogUrls.GetPostUrl("ja", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="ko" href="{{BlogUrls.GetPostUrl("ko", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="pt" href="{{BlogUrls.GetPostUrl("pt", feed.Term)}}" />
+                           <xhtml:link rel="alternate" hreflang="ar" href="{{BlogUrls.GetPostUrl("ar", feed.Term)}}" />
+
+                           <!-- Optional: x-default for fallback -->
+                           <xhtml:link rel="alternate" hreflang="x-default" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
+                        </url>
                         """);
                 }
             }
@@ -63,9 +78,22 @@ public class BlogFeeds
                     {
                         str.Append($$"""
                         <item>
-                          <title>{{feed.BlogData.Title}}</title>
-                          <link>{{feed.Url}}</link>
-                          <description>{{WebUtility.HtmlEncode(HtmlSanitizer.StripHtml(feed.BlogData.Description))}}</description>
+                           <title>{{feed.BlogData.Title}}</title>
+                           <link>{{feed.Url}}</link>
+                           <description>{{WebUtility.HtmlEncode(HtmlSanitizer.StripHtml(feed.BlogData.Description))}}</description>
+
+                           <atom:link rel="alternate" hreflang="en" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="de" href="{{BlogUrls.GetPostUrl("de", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="fr" href="{{BlogUrls.GetPostUrl("fr", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="it" href="{{BlogUrls.GetPostUrl("it", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="es" href="{{BlogUrls.GetPostUrl("es", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="ru" href="{{BlogUrls.GetPostUrl("ru", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="zh" href="{{BlogUrls.GetPostUrl("zh", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="ja" href="{{BlogUrls.GetPostUrl("ja", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="ko" href="{{BlogUrls.GetPostUrl("ko", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="pt" href="{{BlogUrls.GetPostUrl("pt", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="ar" href="{{BlogUrls.GetPostUrl("ar", feed.Term)}}" />
+                           <atom:link rel="alternate" hreflang="x-default" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
                         </item>
                         """);
                     }
@@ -124,10 +152,26 @@ public class BlogFeeds
                     {
                         str.Append($$"""
                         <entry>
-                          <title>{{feed.BlogData.Title}}</title>
-                          <link href="{{feed.Url}}">{{feed.Url}}</link>
-                          <id>{{feed.BlogData.Title}}</id>
-                          <summary>{{WebUtility.HtmlEncode(HtmlSanitizer.StripHtml(feed.BlogData.Description))}}</summary>
+                            <title>{{feed.BlogData.Title}}</title>
+
+                            <!-- Primary link -->
+                            <link rel="alternate" type="text/html" hreflang="en" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
+
+                            <!-- Hreflang alternate links -->
+                            <link rel="alternate" type="text/html" hreflang="de" href="{{BlogUrls.GetPostUrl("de", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="fr" href="{{BlogUrls.GetPostUrl("fr", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="it" href="{{BlogUrls.GetPostUrl("it", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="es" href="{{BlogUrls.GetPostUrl("es", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="ru" href="{{BlogUrls.GetPostUrl("ru", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="zh" href="{{BlogUrls.GetPostUrl("zh", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="ja" href="{{BlogUrls.GetPostUrl("ja", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="ko" href="{{BlogUrls.GetPostUrl("ko", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="pt" href="{{BlogUrls.GetPostUrl("pt", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="ar" href="{{BlogUrls.GetPostUrl("ar", feed.Term)}}" />
+                            <link rel="alternate" type="text/html" hreflang="x-default" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
+
+                            <id>{{feed.BlogData.Title}}</id>
+                            <summary>{{WebUtility.HtmlEncode(HtmlSanitizer.StripHtml(feed.BlogData.Description))}}</summary>
                         </entry>
                         """);
                     }
