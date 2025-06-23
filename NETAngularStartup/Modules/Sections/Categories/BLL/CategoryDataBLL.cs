@@ -146,6 +146,7 @@ public static class CategoryDataBLL
                 Title = entity.Title,
                 Culture = entity.Culture,
                 Description = entity.Description,
+                MetaDescription = entity.MetaDescription,
                 SubTitle = entity.SubTitle
             };
 
@@ -179,6 +180,7 @@ public static class CategoryDataBLL
                 existingContent.Title = entity.Title;
                 existingContent.SubTitle = entity.SubTitle;
                 existingContent.Description = entity.Description;
+                existingContent.MetaDescription = entity.MetaDescription;
 
                 context.Entry(existingContent).State = EntityState.Modified;
                 await context.SaveChangesAsync();

@@ -4,54 +4,80 @@ using DevCodeArchitect.Utilities;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace DevCodeArchitect.SDK;
 public class BlogFeeds
 {
     public static async Task<string> generateGoogleSitemap(ApplicationDBContext context, BlogQueryEntity entity)
     {
-        var str = new StringBuilder();
-
-        str.Append($$"""
-            <?xml version="1.0" encoding="UTF-8"?>
-            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            """);
-
-        if (entity != null)
+        using var stringWriter = new StringWriter();
+        var settings = new XmlWriterSettings
         {
-            var feeds = await BlogsBLL.LoadItems(context, entity);
-            if (feeds != null)
+            Indent = true,
+            Async = true,
+            Encoding = Encoding.UTF8
+        };
+
+        using (var writer = XmlWriter.Create(stringWriter, settings))
+        {
+            await writer.WriteStartDocumentAsync();
+
+            // Root element with namespaces
+            await writer.WriteStartElementAsync(null, "urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
+            await writer.WriteAttributeStringAsync("xmlns", "xhtml", null, "http://www.w3.org/1999/xhtml");
+
+            if (entity != null)
             {
-                foreach (var feed in feeds)
+                var feeds = await BlogsBLL.LoadItems(context, entity);
+                if (feeds != null)
                 {
-                    str.Append($$"""
-                        <url>
-                           <loc>{{BlogUrls.GetPostUrl("en", feed.Term)}}</loc>
-                           <lastmod>{{feed.UpdatedAt}}</lastmod>
+                    var languages = new[] { "en", "de", "fr", "it", "es", "ru", "zh", "ja", "ko", "pt", "ar" };
 
-                           <xhtml:link rel="alternate" hreflang="en" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="de" href="{{BlogUrls.GetPostUrl("de", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="fr" href="{{BlogUrls.GetPostUrl("fr", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="it" href="{{BlogUrls.GetPostUrl("it", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="es" href="{{BlogUrls.GetPostUrl("es", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ru" href="{{BlogUrls.GetPostUrl("ru", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="zh" href="{{BlogUrls.GetPostUrl("zh", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ja" href="{{BlogUrls.GetPostUrl("ja", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ko" href="{{BlogUrls.GetPostUrl("ko", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="pt" href="{{BlogUrls.GetPostUrl("pt", feed.Term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ar" href="{{BlogUrls.GetPostUrl("ar", feed.Term)}}" />
+                    foreach (var feed in feeds)
+                    {
+                        var term = feed.Term ?? string.Empty;
+                        var lastMod = feed.UpdatedAt ?? DateTime.UtcNow;
 
-                           <!-- Optional: x-default for fallback -->
-                           <xhtml:link rel="alternate" hreflang="x-default" href="{{BlogUrls.GetPostUrl("en", feed.Term)}}" />
-                        </url>
-                        """);
+                        await writer.WriteStartElementAsync(null, "url", null);
+
+                        // URL location
+                        await writer.WriteElementStringAsync(null, "loc", null,
+                            BlogUrls.GetPostUrl("en", term));
+
+                        // Last modified (UTC format)
+                        await writer.WriteElementStringAsync(null, "lastmod", null,
+                            lastMod.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
+
+                        // Alternate language links
+                        foreach (var lang in languages)
+                        {
+                            await writer.WriteStartElementAsync("xhtml", "link", "http://www.w3.org/1999/xhtml");
+                            await writer.WriteAttributeStringAsync(null, "rel", null, "alternate");
+                            await writer.WriteAttributeStringAsync(null, "hreflang", null, lang);
+                            await writer.WriteAttributeStringAsync(null, "href", null,
+                                BlogUrls.GetPostUrl(lang, term));
+                            await writer.WriteEndElementAsync();
+                        }
+
+                        // x-default language
+                        await writer.WriteStartElementAsync("xhtml", "link", "http://www.w3.org/1999/xhtml");
+                        await writer.WriteAttributeStringAsync(null, "rel", null, "alternate");
+                        await writer.WriteAttributeStringAsync(null, "hreflang", null, "x-default");
+                        await writer.WriteAttributeStringAsync(null, "href", null,
+                            BlogUrls.GetPostUrl("en", term));
+                        await writer.WriteEndElementAsync();
+
+                        await writer.WriteEndElementAsync(); // </url>
+                    }
                 }
             }
+
+            await writer.WriteEndElementAsync(); // </urlset>
+            await writer.WriteEndDocumentAsync();
         }
 
-        str.Append("</urlset>");
-
-        return str.ToString();
+        return stringWriter.ToString();
     }
 
     public static async Task<string> generateRSS(ApplicationDBContext context, BlogQueryEntity entity)

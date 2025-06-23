@@ -54,6 +54,13 @@ public class CategoryData
     public string? Description { get; set; }
 
     /// <summary>
+    /// Secondary localized title or tagline (optional)
+    /// JSON Property: "sub_title" (string, nullable)
+    /// </summary>
+    [JsonPropertyName("metaDescription")]
+    public string? MetaDescription { get; set; }
+
+    /// <summary>
     /// Navigation property to the parent category (not mapped to database)
     /// JSON Property: "category" (object, nullable)
     /// </summary>

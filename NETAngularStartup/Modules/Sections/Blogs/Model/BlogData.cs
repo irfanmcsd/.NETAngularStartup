@@ -55,6 +55,13 @@ public class BlogData
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
+    /// Secondary localized title or tagline (optional)
+    /// JSON Property: "sub_title" (string, nullable)
+    /// </summary>
+    [JsonPropertyName("metaDescription")]
+    public string? MetaDescription { get; set; }
+
+    /// <summary>
     /// Navigation property to the associated category (not mapped to database)
     /// JSON Property: "category" (object, nullable)
     /// </summary>

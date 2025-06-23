@@ -494,6 +494,7 @@ public static class BlogsBLL
                 Title = p.Data.Title,
                 ShortDescription = p.Data.ShortDescription,
                 Description = p.Data.Description,
+                MetaDescription = p.Data.MetaDescription,
                 Culture = p.Data.Culture
             };
 

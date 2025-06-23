@@ -37,11 +37,11 @@ namespace MagicTradeBot.Controllers
             var _culture = string.IsNullOrEmpty(culture) ? "en" : culture;
             var sitemap_feeds = await CategoryFeeds.generateGoogleSitemap(_context, new DevCodeArchitect.Entity.CategoryQueryEntity() { LoadAll = true, IsCache = true, type = DevCodeArchitect.Entity.CategoryEnum.Types.Documentation, IsEnabled = DevCodeArchitect.Entity.Types.ActionTypes.Enabled, Culture = _culture }, "doc");
             if (!string.IsNullOrEmpty(sitemap_feeds))
-                return this.Content(sitemap_feeds);
+                return this.Content(sitemap_feeds, "text/xml");
             else
                 return this.Content("Invalid Response");
         }
 
-        
+
     }
 }

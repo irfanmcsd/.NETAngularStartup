@@ -146,7 +146,8 @@ public static class BlogDataBLL
                 Title = entity.Title,
                 Culture = entity.Culture,
                 Description = entity.Description,
-                ShortDescription = entity.ShortDescription
+                ShortDescription = entity.ShortDescription,
+                MetaDescription = entity.MetaDescription
             };
 
             context.Entry(newContent).State = EntityState.Added;
@@ -179,6 +180,8 @@ public static class BlogDataBLL
                 existingContent.Title = entity.Title;
                 existingContent.ShortDescription = entity.ShortDescription;
                 existingContent.Description = entity.Description;
+                existingContent.MetaDescription = entity.MetaDescription;
+
 
                 context.Entry(existingContent).State = EntityState.Modified;
                 await context.SaveChangesAsync();

@@ -85,9 +85,9 @@ namespace MagicTradeBot.Controllers
         public async Task<IActionResult> SiteMap(string? culture)
         {
             var _culture = string.IsNullOrEmpty(culture) ? "en" : culture;
-            var sitemap_feeds = await CategoryFeeds.generateGoogleSitemap(_context, new DevCodeArchitect.Entity.CategoryQueryEntity() { LoadAll = true, IsCache = true, type = DevCodeArchitect.Entity.CategoryEnum.Types.Blogs, IsEnabled = DevCodeArchitect.Entity.Types.ActionTypes.Enabled, Culture = _culture }, "blog");
+            var sitemap_feeds = await BlogFeeds.generateGoogleSitemap(_context, new BlogQueryEntity() { LoadAll = true, IsCache = true, IsPublic = true, Culture = _culture });
             if (!string.IsNullOrEmpty(sitemap_feeds))
-                return this.Content(sitemap_feeds);
+                return this.Content(sitemap_feeds, "text/xml");
             else
                 return this.Content("Invalid Response");
         }

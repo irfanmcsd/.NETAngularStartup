@@ -452,7 +452,8 @@ public static class CategoriesBLL
                 Title = p.Data.Title,
                 SubTitle = p.Data.SubTitle,
                 Culture = p.Data.Culture,
-                Description = p.Data.Description
+                Description = p.Data.Description,
+                MetaDescription = p.Data.MetaDescription,
             };
         }
 
@@ -521,8 +522,12 @@ public static class CategoriesBLL
                  (!string.IsNullOrEmpty(p.Category.SubTerm) &&
                   p.Category.SubTerm.StartsWith(entity.SlugStartedWith))));
         }
+  
         else if (entity.AdvanceFilter)
         {
+            if (entity.ExcludedId > 0)
+                predicate = predicate.And(p => p.Category != null && p.Category.Id != entity.ExcludedId);
+
             // Add advanced filtering logic here
             // categories must be filter by type
             predicate = predicate.And(p => p.Category != null && p.Category.Type == entity.type);
@@ -590,6 +595,7 @@ public static class CategoriesBLL
             .Append(entity.PageSize)
             .Append(entity.parentid)
             .Append(entity.Culture)
+            .Append(entity.ExcludedId)
             .Append(entity.LoadAll);
 
         if (!string.IsNullOrEmpty(entity.Order))

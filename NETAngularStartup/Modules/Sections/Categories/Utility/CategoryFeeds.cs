@@ -3,60 +3,80 @@ using DevCodeArchitect.Entity;
 using DevCodeArchitect.Utilities;
 
 using System.Text;
+using System.Xml;
 
 namespace DevCodeArchitect.SDK;
 public class CategoryFeeds
 {
     public static async Task<string> generateGoogleSitemap(ApplicationDBContext context, CategoryQueryEntity entity, string directory = "doc")
     {
-        var str = new StringBuilder();
-
-        str.Append($$"""
-            <?xml version="1.0" encoding="UTF-8"?>
-            <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            """);
-
-        if (entity != null)
+        using var stringWriter = new StringWriter();
+        var settings = new XmlWriterSettings
         {
-            var feeds = await CategoriesBLL.LoadItems(context, entity);
-            if (feeds != null)
+            Indent = true,
+            Async = true,
+            Encoding = Encoding.UTF8
+        };
+
+        using (var writer = XmlWriter.Create(stringWriter, settings))
+        {
+            await writer.WriteStartDocumentAsync();
+
+            // Root element with required namespaces
+            await writer.WriteStartElementAsync(null, "urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
+            await writer.WriteAttributeStringAsync("xmlns", "xhtml", null, "http://www.w3.org/1999/xhtml");
+
+            if (entity != null)
             {
-                // 
-                foreach (var feed in feeds)
+                var feeds = await CategoriesBLL.LoadItems(context, entity);
+                if (feeds != null)
                 {
-                    var term = feed.Term ?? string.Empty;
-                    if (feed.UpdatedAt == null)
-                        feed.UpdatedAt = DateTime.Now;
+                    var languages = new[] { "en", "de", "fr", "it", "es", "ru", "zh", "ja", "ko", "pt", "ar" };
 
-                    str.Append($$"""
-                        <url>
-                           <loc>{{CategoryUrls.GetPostUrl("en", directory, term)}}</loc>
-                           
-                           <lastmod>{{feed.UpdatedAt}}</lastmod>
+                    foreach (var feed in feeds)
+                    {
+                        var term = feed.Term ?? string.Empty;
+                        var lastMod = feed.UpdatedAt ?? DateTime.UtcNow;
 
-                           <xhtml:link rel="alternate" hreflang="en" href="{{CategoryUrls.GetPostUrl("en", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="de" href="{{CategoryUrls.GetPostUrl("de", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="fr" href="{{CategoryUrls.GetPostUrl("fr", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="it" href="{{CategoryUrls.GetPostUrl("it", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="es" href="{{CategoryUrls.GetPostUrl("es", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ru" href="{{CategoryUrls.GetPostUrl("ru", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="zh" href="{{CategoryUrls.GetPostUrl("zh", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ja" href="{{CategoryUrls.GetPostUrl("ja", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ko" href="{{CategoryUrls.GetPostUrl("ko", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="pt" href="{{CategoryUrls.GetPostUrl("pt", directory, term)}}" />
-                           <xhtml:link rel="alternate" hreflang="ar" href="{{CategoryUrls.GetPostUrl("ar", directory, term)}}" />
+                        await writer.WriteStartElementAsync(null, "url", null);
 
-                           <!-- Optional: x-default for fallback -->
-                           <xhtml:link rel="alternate" hreflang="x-default" href="{{CategoryUrls.GetPostUrl("en", directory, term)}}" />
-                        </url>
-                        """);
+                        // URL location
+                        await writer.WriteElementStringAsync(null, "loc", null,
+                            CategoryUrls.GetPostUrl("en", directory, term));
+
+                        // Last modified (UTC format)
+                        await writer.WriteElementStringAsync(null, "lastmod", null,
+                            lastMod.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"));
+
+                        // Alternate language links
+                        foreach (var lang in languages)
+                        {
+                            await writer.WriteStartElementAsync("xhtml", "link", "http://www.w3.org/1999/xhtml");
+                            await writer.WriteAttributeStringAsync(null, "rel", null, "alternate");
+                            await writer.WriteAttributeStringAsync(null, "hreflang", null, lang);
+                            await writer.WriteAttributeStringAsync(null, "href", null,
+                                CategoryUrls.GetPostUrl(lang, directory, term));
+                            await writer.WriteEndElementAsync();
+                        }
+
+                        // x-default language
+                        await writer.WriteStartElementAsync("xhtml", "link", "http://www.w3.org/1999/xhtml");
+                        await writer.WriteAttributeStringAsync(null, "rel", null, "alternate");
+                        await writer.WriteAttributeStringAsync(null, "hreflang", null, "x-default");
+                        await writer.WriteAttributeStringAsync(null, "href", null,
+                            CategoryUrls.GetPostUrl("en", directory, term));
+                        await writer.WriteEndElementAsync();
+
+                        await writer.WriteEndElementAsync(); // </url>
+                    }
                 }
             }
+
+            await writer.WriteEndElementAsync(); // </urlset>
+            await writer.WriteEndDocumentAsync();
         }
 
-        str.Append("</urlset>");
-
-        return str.ToString();
+        return stringWriter.ToString();
     }
 
 }
